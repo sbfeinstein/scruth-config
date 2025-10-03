@@ -1,5 +1,5 @@
 # Source the environment
-for file in ~/.config/scruth_env/.{aliases,functions,exports,extra}; do
+for file in ~/.config/scruth_env/.{aliases,functions,exports,extras}; do
   [ -r "$file" ] && [ -f "$file" ] && source "$file";
 done;
 unset file;
