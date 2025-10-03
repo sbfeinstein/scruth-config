@@ -1,0 +1,21 @@
+# Manage your dotfiles across multiple diverse machines, securely
+brew "chezmoi"
+# Distributed revision control system
+brew "git"
+# Password manager that keeps all passwords secure behind one password
+cask "1password"
+# Command-line interface for 1Password
+cask "1password-cli"
+# Web browser
+cask "google-chrome"
+# Digital note taking app
+cask "microsoft-onenote"
+# Text editor for code, markup and prose
+cask "sublime-text"
+# Open-source code editor
+cask "visual-studio-code"
+# Video communication and virtual meeting platform
+cask "zoom"
+vscode "github.copilot"
+vscode "github.copilot-chat"
+vscode "yzhang.markdown-all-in-one"
