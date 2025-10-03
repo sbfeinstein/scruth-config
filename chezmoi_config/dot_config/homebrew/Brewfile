@@ -1,0 +1,30 @@
+# Bourne-Again SHell, a UNIX command interpreter
+brew "bash"
+# Manage your dotfiles across multiple diverse machines, securely
+brew "chezmoi"
+# Distributed revision control system
+brew "git"
+# Password manager that keeps all passwords secure behind one password
+cask "1password"
+# Command-line interface for 1Password
+cask "1password-cli"
+# Tool to customise input devices and automate computer systems
+cask "bettertouchtool"
+cask "font-jetbrains-mono-nerd-font"
+# Web browser
+cask "google-chrome"
+# Java IDE by JetBrains
+cask "intellij-idea"
+# Digital note taking app
+cask "microsoft-onenote"
+# Instant messaging application focusing on security
+cask "signal"
+# Text editor for code, markup and prose
+cask "sublime-text"
+# Open-source code editor
+cask "visual-studio-code"
+# Video communication and virtual meeting platform
+cask "zoom"
+vscode "github.copilot"
+vscode "github.copilot-chat"
+vscode "yzhang.markdown-all-in-one"

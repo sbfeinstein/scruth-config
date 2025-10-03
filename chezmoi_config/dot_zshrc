@@ -1,0 +1,5 @@
+# Source the environment
+for file in ~/.config/scruth_env/.{ohmyzshell,aliases,functions,exports,extras}; do
+  [ -r "$file" ] && [ -f "$file" ] && source "$file";
+done;
+unset file;

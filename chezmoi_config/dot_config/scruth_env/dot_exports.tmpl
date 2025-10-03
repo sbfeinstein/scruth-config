@@ -1,0 +1,10 @@
+# Command configurations
+export LESS="-FRX" # Don't clear screen on exit, don't page if everything fits in one screen
+
+# Path
+# Generally should assume order matters
+# export PATH="<example>:$PATH"
+
+# X Desktop Group (XDG) standards for configuration
+# https://specifications.freedesktop.org/basedir-spec/latest/
+export XDG_CONFIG_HOME={{ .chezmoi.homeDir }}/.config

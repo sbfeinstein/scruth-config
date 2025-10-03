@@ -1,0 +1,6 @@
+# Agnoster
+# https://github.com/agnoster/agnoster-zsh-theme
+export DEFAULT_USER='sfeinstein'
+
+# Homebrew
+eval "$(/opt/homebrew/bin/brew shellenv)"
