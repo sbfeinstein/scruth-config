@@ -1,10 +1,10 @@
-[gpg]
-	format = ssh
 [user]
 	name = Scott Feinstein
 	email = Scott_Feinstein@yahoo.com
 	signingkey = {{ .chezmoi.homeDir }}/.ssh/{{ .gitSigningKey }}.pub
 [commit]
 	gpgsign = true
+[gpg]
+	format = ssh
 [gpg "ssh"]
 	allowedSignersFile = {{ .chezmoi.homeDir }}/.ssh/allowed_signers
