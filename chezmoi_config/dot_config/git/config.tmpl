@@ -6,3 +6,5 @@
 	signingkey = {{ .chezmoi.homeDir }}/.ssh/{{ .gitSigningKey }}.pub
 [commit]
 	gpgsign = true
+[gpg "ssh"]
+	allowedSignersFile = {{ .chezmoi.homeDir }}/.ssh/allowed_signers
