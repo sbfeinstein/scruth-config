@@ -2,36 +2,37 @@
 set -euo pipefail
 
 _check_machine_is_scruthsystem() {
-    is_allowed_scruthsystem() {
-        ALLOWED_HOSTNAMES=("sfeinstein-dev")
-        hostname=$(scutil --get ComputerName)
-        for allowed_hostname in "${ALLOWED_HOSTNAMES[@]}"; do
-            if [[ "$hostname" == "$allowed_hostname" ]]; then
-                return 0
-            fi
-        done
-        return 1
-    }
-
+  is_allowed_scruthsystem() {
+    ALLOWED_HOSTNAMES=("sfeinstein-dev")
     hostname=$(scutil --get ComputerName)
-    if ! is_allowed_scruthsystem; then
-        echo "❌  This system ('$hostname') is not an allowed ScruthSystem™️  , aborting setup"
-        exit 1
-    fi
+    for allowed_hostname in "${ALLOWED_HOSTNAMES[@]}"; do
+      if [[ "$hostname" == "$allowed_hostname" ]]; then
+        return 0
+      fi
+    done
+    return 1
+  }
+
+  hostname=$(scutil --get ComputerName)
+  if is_allowed_scruthsystem; then
+    echo "🚀  Setting up ScruthSystem™️  $hostname"
+  else
+    echo "❌  This system ('$hostname') is not an allowed ScruthSystem™️  , aborting setup"
+    exit 1
+  fi
 }
 
 _check_machine_is_scruthsystem
-echo "🚀  Setting up ScruthSystem™️  $hostname"
 
 # Xcode command line tools are a prerequisite for Homebrew.
 # So we install them independently rather than manage them via brew.
-if xcode-select -p &> /dev/null; then
+if xcode-select -p &>/dev/null; then
   echo "✅  Xcode command line tools are already installed"
 else
   echo -n "🔧  Installing Xcode command line tools..."
-  xcode-select --install &> /dev/null
+  xcode-select --install &>/dev/null
   
-  while ! xcode-select -p &> /dev/null; do
+  while ! xcode-select -p &>/dev/null; do
     # echo a single dot on the same line
     echo -n "."
     sleep 5
@@ -66,10 +67,10 @@ fi
 
 # Sign in to 1Password
 while ! op whoami &>/dev/null; do
-    echo "🔐  1Password CLI is not logged in or session expired..."
-    echo "    Consider turning on desktop app integration for easier sign-in:"
-    echo "    https://developer.1password.com/docs/cli/get-started#step-2-turn-on-the-1password-desktop-app-integration"
-    eval $(op signin)
+  echo "🔐  1Password CLI is not logged in or session expired..."
+  echo "    Consider turning on desktop app integration for easier sign-in:"
+  echo "    https://developer.1password.com/docs/cli/get-started#step-2-turn-on-the-1password-desktop-app-integration"
+  eval $(op signin)
 done
 echo "✅  1Password CLI is logged in"
 
