@@ -8,6 +8,8 @@ cask "1password"
 cask "1password-cli"
 # Web browser
 cask "google-chrome"
+# Java IDE by JetBrains
+cask "intellij-idea"
 # Digital note taking app
 cask "microsoft-onenote"
 # Text editor for code, markup and prose
