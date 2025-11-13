@@ -3,7 +3,7 @@ set -euo pipefail
 
 _check_machine_is_scruthsystem() {
   is_allowed_scruthsystem() {
-    ALLOWED_HOSTNAMES=("sfeinstein-dev")
+    ALLOWED_HOSTNAMES=("sfeinstein-studio-m4")
     hostname=$(scutil --get ComputerName)
     for allowed_hostname in "${ALLOWED_HOSTNAMES[@]}"; do
       if [[ "$hostname" == "$allowed_hostname" ]]; then
@@ -15,7 +15,7 @@ _check_machine_is_scruthsystem() {
 
   hostname=$(scutil --get ComputerName)
   if is_allowed_scruthsystem; then
-    echo "🚀  Setting up ScruthSystem™️  $hostname"
+    echo "🚀 Setting up ScruthSystem™️  $hostname"
   else
     echo "❌  This system ('$hostname') is not an allowed ScruthSystem™️  , aborting setup"
     exit 1
@@ -68,9 +68,9 @@ fi
 # Sign in to 1Password
 while ! op whoami &>/dev/null; do
   echo "🔐  1Password CLI is not logged in or session expired..."
-  echo "    Consider turning on desktop app integration for easier sign-in:"
+  echo "    Manually installing desktop app integration may make it easier to sign-in:"
   echo "    https://developer.1password.com/docs/cli/get-started#step-2-turn-on-the-1password-desktop-app-integration"
-  eval $(op signin)
+  eval "$(op signin)"
 done
 echo "✅  1Password CLI is logged in"
 
