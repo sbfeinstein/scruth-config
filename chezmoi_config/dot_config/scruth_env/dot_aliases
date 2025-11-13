@@ -1,2 +1,2 @@
 # Aliases
-alias chezmoi-apply='chezmoi apply && omz reload'
+alias chez='chezmoi apply && omz reload'
