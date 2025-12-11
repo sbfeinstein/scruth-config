@@ -1,15 +1,21 @@
 #!/bin/bash
 set -euo pipefail
 
-# This script is intended to always run before chezmoi renders the destination Brewfile.
-# It updates the source Brewfile based on what packages are actually currently installed via Brew.
-# Hence it will also delete items from the source Brewfile if they are no longer installed.
+# In chezmoi, "source" refers to what is stored in the repo and "destination" are the files that get rendered
+# and impact actual applications.
 #
-# This approach means normal (non-Brewfile-related) brew commands can be used to manage packages.
-# After doing so, a "chezmoi apply" will make sure our configuration stored in source control matches
-# reality.
+# This script runs *before* chezmoi renders the source to the destination.  Its purpose is to decide whether or not
+# to update the *source* Brewfile based on what brew packages are actually currently installed in the system.
 #
-# Note that the script that runs after Brewfile is rendered to the destination is mostly
+# This supports a convenient daily workflow of simply "brew install"ing whatever is desired, followed by applying
+# chezmoi such as via the "chez" alias.  Then, a PR can be created from the resulting change to the source Brewfile.
+#
+# In the (much) less frequent case of this being the initial chezmoi apply for a new or clean system, the script does
+# *not* update the source Brewfile since that would effectively mean setting it to empty.  A major purpose of using
+# chezmoi is so that for new system installs, the desired set of brew packages captured in the repo are installed.
+# So, if there is no destination Brewfile, we can assume this is an initial install and not touch the source file.
+#
+
 BREWFILE="{{ joinPath .chezmoi.sourceDir "dot_config/homebrew/Brewfile" }}"
 
 if [ ! -f "$BREWFILE" ]; then
