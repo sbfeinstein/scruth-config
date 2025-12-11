@@ -1,10 +1,6 @@
 # Agnoster
 # https://github.com/agnoster/agnoster-zsh-theme
-prompt_context() {
-  if [[ "$USER" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    prompt_segment black default "%(!.%{%F{yellow}%}.)$USER"
-  fi
-}
+export DEFAULT_USER='sfeinstein'
 
 # Homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"

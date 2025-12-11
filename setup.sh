@@ -79,7 +79,7 @@ if [ -d "$(chezmoi source-path 2>/dev/null)" ]; then
   chezmoi update
   echo "✅  Chezmoi updated"
 else
-  chezmoi init sbfeinstein/scruth-config --branch chezmoi-initial
+  chezmoi init sbfeinstein/scruth-config --branch main
   chezmoi apply
   echo "✅  Chezmoi initialized"
 fi

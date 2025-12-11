@@ -1,0 +1,16 @@
+#!/bin/bash
+
+echo "Installing packages based on destination Brewfile"
+
+# The commented "Brewfile hash" line forces this script to be viewed as having been changed, if the actual
+# live Brewfile has been modified; this is a signal to chezmoi to run this script.
+# Brewfile hash: {{ joinPath .chezmoi.homeDir ".config/homebrew/Brewfile" | include | sha256sum }}
+
+# Brew configuration relies on some of our environment exports so we must explicitly source them
+source {{ joinPath .chezmoi.homeDir ".config/scruth_env/.exports" }}
+
+# Use brew to install all the packages in our live Brewfile
+# This is mostly relevant when using chezmoi to initialize a new system but shouldn't cause
+# problems otherwise, as a separate script updated prior to this updates the source Brewfile to match
+# the current state of the system (in which case this is a no-op).
+brew bundle --global

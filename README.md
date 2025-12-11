@@ -11,7 +11,7 @@ At this time, only Mac computers are supported and a "developer" configuration i
 Download and execute the script in one step!
 
 ```sh
-curl -sfL https://raw.githubusercontent.com/sbfeinstein/scruth-config/refs/heads/chezmoi-initial/setup.sh | bash
+curl -sfL https://raw.githubusercontent.com/sbfeinstein/scruth-config/refs/heads/main/setup.sh | bash
 ```
 
 # How it works

@@ -1,0 +1,33 @@
+#!/bin/bash
+set -euo pipefail
+
+# This script is intended to always run before chezmoi renders the destination Brewfile.
+# It updates the source Brewfile based on what packages are actually currently installed via Brew.
+# Hence it will also delete items from the source Brewfile if they are no longer installed.
+#
+# This approach means normal (non-Brewfile-related) brew commands can be used to manage packages.
+# After doing so, a "chezmoi apply" will make sure our configuration stored in source control matches
+# reality.
+#
+# Note that the script that runs after Brewfile is rendered to the destination is mostly
+BREWFILE="{{ joinPath .chezmoi.sourceDir "dot_config/homebrew/Brewfile" }}"
+
+if [ ! -f "$BREWFILE" ]; then
+  echo "Destination Brewfile does not exist; skipping updating source Brewfile under the assumption this is a first install"
+  exit
+fi
+
+echo "Updating source Brewfile from installed packages"
+
+# Brew configuration relies on some of our environment exports so we must explicitly source them
+source {{ joinPath .chezmoi.homeDir ".config/scruth_env/.exports" }}
+
+# Update the chezmoi source Brewfile to include any Brew packages that were installed directly
+# (not via Brewfile).  This may seem circular or counterintuitive but the idea is that most
+# of the time regular brew commands will be used to install packages.  A "chezmoi apply" should
+# capture that state into the source Brewfile so it can be committed back to the repo.
+#
+# Similarly, if normal brew commands are used to uninstall a package, a "chezmoi apply" will
+# again update the source so that it is in a nice state for fully initializing and managing
+# the systems.
+brew bundle dump --force --describe --file="$BREWFILE"

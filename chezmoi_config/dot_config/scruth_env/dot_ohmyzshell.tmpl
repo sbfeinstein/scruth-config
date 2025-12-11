@@ -1,3 +1,11 @@
+# scruth-config:
+# The content below is what Oh My Zsh adds to .zshrc.
+# It was moved here so it can be managed by this repo and chezmoi.
+# For clean separation of concerns, other shell-related changes are in other
+# dotfiles.
+
+###############################################################################
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
 
@@ -64,7 +72,9 @@ ZSH_THEME="agnoster"
 
 # Would you like to use another custom folder than $ZSH/custom?
 #
-# Scott note: this is intentional since chezmoi updates the default location
+# scruth-config NOTE:
+# It is intentional that ZSH_CUSTOM is defaulted; chezmoi (by default) overrides this to
+# ~/.oh-my-zsh/custom, which itself is managed within the scruth-config repo
 #
 # ZSH_CUSTOM=/path/to/new-custom-folder
 

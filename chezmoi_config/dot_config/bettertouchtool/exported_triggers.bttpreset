@@ -1,0 +1,42 @@
+[
+  {
+    "BTTLastUpdatedAt" : 1757553270.9549952,
+    "BTTTriggerType" : 2,
+    "BTTTriggerTypeDescriptionReadOnly" : "1 Finger Tap Left",
+    "BTTTriggerClass" : "BTTTriggerTypeMagicMouse",
+    "BTTUUID" : "1AD28E3A-66AC-4452-84A0-BD9F3BBCF0F1",
+    "BTTOrder" : 0,
+    "BTTActionsToExecute" : [
+      {
+        "BTTLastUpdatedAt" : 1757091047.0080829,
+        "BTTTriggerParentUUID" : "1AD28E3A-66AC-4452-84A0-BD9F3BBCF0F1",
+        "BTTIsPureAction" : true,
+        "BTTTriggerClass" : "BTTTriggerTypeMagicMouse",
+        "BTTUUID" : "98A8EC1B-0103-49EA-BAE5-40AFE2C1B24C",
+        "BTTPredefinedActionType" : 3,
+        "BTTPredefinedActionName" : "Left Click (At Current Mouse Position)",
+        "BTTOrder" : 1
+      }
+    ]
+  },
+  {
+    "BTTLastUpdatedAt" : 1757091348.6757488,
+    "BTTTriggerType" : 3,
+    "BTTTriggerTypeDescriptionReadOnly" : "1 Finger Tap Right",
+    "BTTTriggerClass" : "BTTTriggerTypeMagicMouse",
+    "BTTUUID" : "EA12AD36-96FE-4A05-B22B-58FD3E0D5A63",
+    "BTTOrder" : 1,
+    "BTTActionsToExecute" : [
+      {
+        "BTTLastUpdatedAt" : 1757091104.105216,
+        "BTTTriggerParentUUID" : "EA12AD36-96FE-4A05-B22B-58FD3E0D5A63",
+        "BTTIsPureAction" : true,
+        "BTTTriggerClass" : "BTTTriggerTypeMagicMouse",
+        "BTTUUID" : "191FA1BD-8482-4545-9E1A-9E9A1942833F",
+        "BTTPredefinedActionType" : 4,
+        "BTTPredefinedActionName" : "Right Click (At Current Mouse Position)",
+        "BTTOrder" : 2
+      }
+    ]
+  }
+]

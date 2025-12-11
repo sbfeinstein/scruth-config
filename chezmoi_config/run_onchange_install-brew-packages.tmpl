@@ -1,6 +1,0 @@
-#!/bin/bash
-
-# Brewfile hash: {{ joinPath .chezmoi.homeDir ".config/homebrew/Brewfile" | include | sha256sum }}
-
-source {{ joinPath .chezmoi.homeDir ".config/scruth_env/.exports" }}
-brew bundle --global
