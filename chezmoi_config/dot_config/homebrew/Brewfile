@@ -4,6 +4,8 @@ brew "bash"
 brew "chezmoi"
 # Distributed revision control system
 brew "git"
+# GNU Privacy Guard (OpenPGP)
+brew "gnupg"
 # Password manager that keeps all passwords secure behind one password
 cask "1password"
 # Command-line interface for 1Password
