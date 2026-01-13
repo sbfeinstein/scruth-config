@@ -1,5 +1,7 @@
 # Bourne-Again SHell, a UNIX command interpreter
 brew "bash"
+# Programmable completion for Bash 4.2+
+brew "bash-completion@2"
 # Manage your dotfiles across multiple diverse machines, securely
 brew "chezmoi"
 # Distributed revision control system
@@ -25,6 +27,8 @@ cask "intellij-idea"
 cask "microsoft-onenote"
 # Instant messaging application focusing on security
 cask "signal"
+# Music streaming service
+cask "spotify"
 # Text editor for code, markup and prose
 cask "sublime-text"
 # Open-source code editor
