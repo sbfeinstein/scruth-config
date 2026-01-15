@@ -5,5 +5,8 @@ export DEFAULT_USER='sfeinstein'
 # Homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+# SDKMAN!
+. "{{ .chezmoi.homeDir }}/.sdkman/bin/sdkman-init.sh"
+
 # uv
 . "{{ .chezmoi.homeDir }}/.local/bin/env"
