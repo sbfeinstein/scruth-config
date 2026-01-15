@@ -1,0 +1,2 @@
+{{- /* chezmoi:modify-template */ -}}
+{{- .chezmoi.stdin | replaceAllRegex "sdkman_auto_env=false\\W" "sdkman_auto_env=true\n" }}
