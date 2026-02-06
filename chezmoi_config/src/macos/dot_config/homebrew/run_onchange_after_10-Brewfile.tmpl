@@ -7,7 +7,7 @@ echo "Installing packages based on destination Brewfile"
 # Brewfile hash: {{ joinPath .chezmoi.homeDir ".config/homebrew/Brewfile" | include | sha256sum }}
 
 # Brew configuration relies on some of our environment exports so we must explicitly source them
-source {{ joinPath .chezmoi.homeDir ".config/scruth_env/.exports" }}
+source {{ joinPath .chezmoi.homeDir ".config/scruth_env/.exports" | quote }}
 
 # Use brew to install all the packages in our live Brewfile
 # This is mostly relevant when using chezmoi to initialize a new system but shouldn't cause

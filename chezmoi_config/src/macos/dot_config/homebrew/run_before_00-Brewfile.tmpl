@@ -16,7 +16,7 @@ set -euo pipefail
 # So, if there is no destination Brewfile, we can assume this is an initial install and not touch the source file.
 #
 
-BREWFILE="{{ joinPath .chezmoi.sourceDir "dot_config/homebrew/Brewfile" }}"
+BREWFILE={{ joinPath .chezmoi.sourceDir "dot_config/homebrew/Brewfile" | quote }}
 
 if [ ! -f "$BREWFILE" ]; then
   echo "Destination Brewfile does not exist; skipping updating source Brewfile under the assumption this is a first install"
@@ -26,7 +26,7 @@ fi
 echo "Updating source Brewfile from installed packages"
 
 # Brew configuration relies on some of our environment exports so we must explicitly source them
-source {{ joinPath .chezmoi.homeDir ".config/scruth_env/.exports" }}
+source {{ joinPath .chezmoi.homeDir ".config/scruth_env/.exports" | quote }}
 
 # Update the chezmoi source Brewfile to include any Brew packages that were installed directly
 # (not via Brewfile).  This may seem circular or counterintuitive but the idea is that most

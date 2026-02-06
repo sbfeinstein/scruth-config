@@ -1,4 +1,11 @@
-sourceDir = {{ .chezmoi.sourceDir | quote }}
+{{- if eq .chezmoi.os "darwin" }}
+sourceDir = {{ joinPath .chezmoi.sourceDir "/src/macos" | quote }}
+{{- else if eq .chezmoi.os "windows" }}
+sourceDir = {{ joinPath .chezmoi.sourceDir "/src/windows" | quote }}
+{{- else }}
+{{- warnf "Aborting chezmoi init because OS is not supported: '%s'" .chezmoi.os }}
+{{- exit 1 }}
+{{- end }}
 
 [data]
 profile = "dev"
