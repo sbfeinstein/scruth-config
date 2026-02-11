@@ -25,9 +25,6 @@ fi
 
 echo "Updating source Brewfile from installed packages"
 
-# Brew configuration relies on some of our environment exports so we must explicitly source them
-source {{ joinPath .chezmoi.homeDir ".config/scruth_env/.exports" | quote }}
-
 # Update the chezmoi source Brewfile to include any Brew packages that were installed directly
 # (not via Brewfile).  This may seem circular or counterintuitive but the idea is that most
 # of the time regular brew commands will be used to install packages.  A "chezmoi apply" should
@@ -36,4 +33,4 @@ source {{ joinPath .chezmoi.homeDir ".config/scruth_env/.exports" | quote }}
 # Similarly, if normal brew commands are used to uninstall a package, a "chezmoi apply" will
 # again update the source so that it is in a nice state for fully initializing and managing
 # the systems.
-brew bundle dump --force --describe --file="$BREWFILE"
+XDG_CONFIG_HOME={{ .chezmoi.homeDir }}/.config brew bundle dump --force --describe --file="$BREWFILE"

@@ -8,5 +8,6 @@ sourceDir = {{ joinPath .chezmoi.sourceDir "/src/windows" | quote }}
 {{- end }}
 
 [data]
+baseSourceDir = {{ joinPath .chezmoi.sourceDir | quote }}
 profile = "dev"
 gitSigningKey = "id_github"

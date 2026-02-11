@@ -84,3 +84,4 @@ else
 fi
 
 echo "😎  Finished setting up $hostname"
+echo "ℹ️  Close this shell and open a new one"
