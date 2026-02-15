@@ -5,7 +5,4 @@ echo "Installing packages based on destination Brewfile"
 # Use brew to install all the packages in the Brewfile
 # We only need to do this on the first install on a new system; otherwise the live (destination) Brewfile is the
 # source of truth and the before script updates the Brewfile in source based on the currently installed packages.
-#
-# We set XDG_CONFIG_HOME explicitly since this may be a first run on a new system, in which case this shell won't
-# have sourced the ~/.config/scruth_env/dot_exports which otherwise set it
-XDG_CONFIG_HOME=~/.config brew bundle --global
+XDG_CONFIG_HOME={{ joinPath .chezmoi.sourceDir "/dot_config" | quote }} brew bundle --global
