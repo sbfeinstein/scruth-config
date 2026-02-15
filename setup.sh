@@ -84,6 +84,6 @@ else
 fi
 
 echo "😎  Finished setting up $hostname"
-echo "ℹ️  Close this shell and open a new one"
-echo "ℹ️  And set upstream to SSH rather than HTTPS via:
-echo "  git remote set-url origin git@github.com:sbfeinstein/scruth-config.git"
+echo "ℹ️   Close this shell and open a new one"
+echo "ℹ️   And set upstream to SSH rather than HTTPS via:"
+echo "    git remote set-url origin git@github.com:sbfeinstein/scruth-config.git"
