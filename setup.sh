@@ -80,12 +80,16 @@ if [ -d "$(chezmoi source-path 2>/dev/null)" ]; then
   echo "✅  Chezmoi updated"
 else
   echo "ℹ️  Chezmoi not already initialized, initializing and applying"
+  # Intentionally split up the chezmoi init and apply, NOT using the --apply option to init
+  # This is because our init operation modifies the chezmoi sourceDir in the config it writes
+  # And we need the apply to pick up the new value, which it didn't seem to do consistently
+  # when we combined commands.
   chezmoi init sbfeinstein/scruth-config --branch main
   chezmoi apply
   echo "✅  Chezmoi initialized"
 fi
 
 echo "😎  Finished setting up $hostname"
-echo "ℹ️   Close this shell and open a new one"
-echo "ℹ️   And set upstream to SSH rather than HTTPS via:"
+echo "ℹ️   Set upstream to SSH rather than HTTPS via:"
+echo "    chezmoi cd"
 echo "    git remote set-url origin git@github.com:sbfeinstein/scruth-config.git"

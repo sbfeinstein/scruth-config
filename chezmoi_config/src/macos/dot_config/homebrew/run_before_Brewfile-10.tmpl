@@ -16,7 +16,7 @@ set -euo pipefail
 # So, if there is no destination Brewfile, we can assume this is an initial install and not touch the source file.
 #
 
-BREWFILE={{ joinPath .chezmoi.sourceDir "dot_config/homebrew/Brewfile.tmpl" | quote }}
+BREWFILE={{ joinPath .chezmoi.sourceDir "dot_config/homebrew/Brewfile" | quote }}
 
 if [ ! -f "$BREWFILE" ]; then
   echo "Destination Brewfile does not exist; skipping updating source Brewfile under the assumption this is a first install"
@@ -33,4 +33,4 @@ echo "Updating source Brewfile from installed packages"
 # Similarly, if normal brew commands are used to uninstall a package, a "chezmoi apply" will
 # again update the source so that it is in a nice state for fully initializing and managing
 # the systems.
-XDG_CONFIG_HOME={{ .chezmoi.homeDir }}/.config brew bundle dump --force --describe --file="$BREWFILE"
+brew bundle dump --force --describe --file="$BREWFILE"
