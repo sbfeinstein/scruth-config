@@ -79,11 +79,13 @@ if [ -d "$(chezmoi source-path 2>/dev/null)" ]; then
   chezmoi update
   echo "✅  Chezmoi updated"
 else
-  chezmoi init sbfeinstein/scruth-config --branch main --apply
+  echo "ℹ️  Chezmoi not already initialized, initializing and applying"
+  chezmoi init sbfeinstein/scruth-config --branch main
+  chezmoi apply
   echo "✅  Chezmoi initialized"
 fi
 
 echo "😎  Finished setting up $hostname"
 echo "ℹ️   Close this shell and open a new one"
 echo "ℹ️   And set upstream to SSH rather than HTTPS via:"
-echo "    q"
+echo "    git remote set-url origin git@github.com:sbfeinstein/scruth-config.git"
