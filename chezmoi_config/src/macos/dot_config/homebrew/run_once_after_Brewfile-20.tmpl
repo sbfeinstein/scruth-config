@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Installing packages based on destination Brewfile"
+echo "Installing packages based on destination Brewfile {{ joinPath .chezmoi.sourceDir "/dot_config" | quote }}"
 
 # Use brew to install all the packages in the Brewfile
 # We only need to do this on the first install on a new system; otherwise the live (destination) Brewfile is the
