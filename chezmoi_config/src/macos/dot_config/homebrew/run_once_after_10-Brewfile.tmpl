@@ -8,4 +8,4 @@ echo "Installing packages based on destination Brewfile"
 #
 # We set XDG_CONFIG_HOME explicitly since this may be a first run on a new system, in which case this shell won't
 # have sourced the ~/.config/scruth_env/dot_exports which otherwise set it
-XDG_CONFIG_HOME={{ .chezmoi.homeDir }}/.config brew bundle --global
+XDG_CONFIG_HOME=~/.config brew bundle --global
