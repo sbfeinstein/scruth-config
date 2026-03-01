@@ -1,0 +1,5 @@
+Host *
+  AddKeysToAgent yes
+
+Host github.com
+  IdentityFile {{ .chezmoi.homeDir }}/.ssh/{{ .gitSigningKey }}

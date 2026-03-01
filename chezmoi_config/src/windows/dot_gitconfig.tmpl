@@ -1,7 +1,7 @@
 [user]
 	name = Scott Feinstein
 	email = Scott_Feinstein@yahoo.com
-	signingkey = {{ .chezmoi.homeDir }}/.ssh/{{ .gitSigningKey }}.pub
+	signingkey = {{ .chezmoi.homeDir }}/.ssh/{{ .gitSigningKey }}
 [commit]
 	gpgsign = true
 [gpg]
@@ -11,4 +11,4 @@
 [init]
 	defaultBranch = main
 [core]
-	sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
+	editor = "'C:/Program Files/Sublime Text 3/subl.exe' -w"
