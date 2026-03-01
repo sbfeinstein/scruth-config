@@ -14,6 +14,10 @@ Download and execute the script in one step!
 curl -sfL https://raw.githubusercontent.com/sbfeinstein/scruth-config/refs/heads/main/setup.sh | bash
 ```
 
+```powershell
+Invoke-Expression "& { $(Invoke-RestMethod https://raw.githubusercontent.com/sbfeinstein/scruth-config/refs/heads/main/setup.ps1) }"
+```
+
 # How it works
 The script bootstraps everything it needs, with the key components being:
 * [homebrew](https://brew.sh/) for package management
