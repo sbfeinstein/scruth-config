@@ -1,5 +1,6 @@
 # scruth-config
 Config, dotfiles and other customizations for Feinstein family computers.
+Supports MacOS and Windows systems.
 
 ***Scruth*** == **Sc**ott + **Ruth**
 
