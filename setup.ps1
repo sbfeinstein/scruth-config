@@ -1,16 +1,26 @@
-﻿# Set console to UTF8 to ensure emojis render correctly in the terminal
+# $script = (Invoke-WebRequest https://raw.githubusercontent.com/sbfeinstein/scruth-config/refs/heads/main/setup.ps1).Content
+# Invoke-Expression "& { $script }"
+#
+# Invoke-Expression "& { $(Invoke-RestMethod https://raw.githubusercontent.com/sbfeinstein/scruth-config/refs/heads/main/setup.ps1) }"
+#
+# Get-Content -Path "setup.ps1" -Encoding UTF8 | Set-Content -Encoding UTF8 "setup_attempt.ps1"
+
+
+# Set console to UTF8 to ensure emojis render correctly in the terminal
 $OutputEncoding = [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
 
 # Define Emoji Constants using Hex codes (PS 5.1 compatible)
-$ICON_INFO    = [char]::ConvertFromUtf32(0x2139) + [char]::ConvertFromUtf32(0xFE0F) # ℹ️
-$ICON_CROSS   = [char]::ConvertFromUtf32(0x274C) # ❌
-$ICON_CHECK   = [char]::ConvertFromUtf32(0x2705) # ✅
-$ICON_ROCKET  = [char]::ConvertFromUtf32(0x1F680) # 🚀
-$ICON_GLASSES = [char]::ConvertFromUtf32(0x1F60E) # 😎
+$ICON_INFO    = [char]::ConvertFromUtf32(0x2139) + [char]::ConvertFromUtf32(0xFE0F)
+$ICON_CROSS   = [char]::ConvertFromUtf32(0x274C)
+$ICON_CHECK   = [char]::ConvertFromUtf32(0x2705)
+$ICON_ROCKET  = [char]::ConvertFromUtf32(0x1F680)
+$ICON_GLASSES = [char]::ConvertFromUtf32(0x1F60E)
+$ICON_TM      = [char]::ConvertFromUtf32(0x2122)
+$ICON_WRENCH  = [char]::ConvertFromUtf32(0x1F527)
 
 $ApprovedComputerNames = @('FAMILYFUN', 'RARSTEENS')
 $RepoToInit = 'sbfeinstein/scruth-config'
-$RepoBranch = 'sfeinstein_windows_support'
+$RepoBranch = 'main'
 
 # Helper to check for a command
 function Find-Command-Exists
@@ -46,7 +56,7 @@ function Install-Package-With-Winget
         return $false
     }
 
-    Write-Host "🔧  Installing $PrettyName via winget (id: $WingetId) ..."
+    Write-Host "$ICON_WRENCH  Installing $PrettyName via winget (id: $WingetId) ..."
     & winget install --accept-package-agreements --accept-source-agreements --id $WingetId
     if ($LASTEXITCODE -eq 0)
     {
@@ -73,7 +83,6 @@ function Update-System-Path
 
     if ($binFolder)
     {
-        # 3. Add to System PATH
         $oldPath = [Environment]::GetEnvironmentVariable("PATH", "Machine")
         if ($oldPath -notlike "*$binFolder*")
         {
@@ -96,10 +105,10 @@ function Update-System-Path
 $ComputerName = $env:COMPUTERNAME
 if (-not ($ApprovedComputerNames -contains $ComputerName))
 {
-    Write-Warning "$ICON_CROSS  This system ($ComputerName) is not an allowed ScruthSystem™️ , aborting setup"
+    Write-Warning "$ICON_CROSS  This system ($ComputerName) is not an allowed ScruthSystem$ICON_TM, aborting setup"
     exit 1
 }
-Write-Output "$ICON_ROCKET  Setting up ScruthSystem™️  $ComputerName"
+Write-Output "$ICON_ROCKET  Setting up ScruthSystem$ICON_TM $ComputerName"
 
 # 1Password CLI
 $ok = Install-Package-With-Winget -CheckCmd 'op' -WingetId 'AgileBits.1Password.CLI' -PrettyName '1Password CLI'
