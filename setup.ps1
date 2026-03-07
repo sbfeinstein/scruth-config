@@ -1,4 +1,13 @@
-﻿# Configuration
+﻿# Set console to UTF8 to ensure emojis render correctly in the terminal
+$OutputEncoding = [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
+
+# Define Emoji Constants using Hex codes (PS 5.1 compatible)
+$ICON_INFO    = [char]::ConvertFromUtf32(0x2139) + [char]::ConvertFromUtf32(0xFE0F) # ℹ️
+$ICON_CROSS   = [char]::ConvertFromUtf32(0x274C) # ❌
+$ICON_CHECK   = [char]::ConvertFromUtf32(0x2705) # ✅
+$ICON_ROCKET  = [char]::ConvertFromUtf32(0x1F680) # 🚀
+$ICON_GLASSES = [char]::ConvertFromUtf32(0x1F60E) # 😎
+
 $ApprovedComputerNames = @('FAMILYFUN', 'RARSTEENS')
 $RepoToInit = 'sbfeinstein/scruth-config'
 $RepoBranch = 'sfeinstein_windows_support'
@@ -26,14 +35,14 @@ function Install-Package-With-Winget
 
     if (Find-Command-Exists $CheckCmd)
     {
-        Write-Host " ℹ️  $PrettyName already installed"
+        Write-Host "$ICON_INFO  $PrettyName already installed"
         return $true
     }
 
     # Check winget
     if (-not (Find-Command-Exists 'winget'))
     {
-        Write-Warning " ❌  winget not found. Please install winget or install $PrettyName manually."
+        Write-Warning "$ICON_CROSS  winget not found. Please install winget or install $PrettyName manually."
         return $false
     }
 
@@ -41,12 +50,12 @@ function Install-Package-With-Winget
     & winget install --accept-package-agreements --accept-source-agreements --id $WingetId
     if ($LASTEXITCODE -eq 0)
     {
-        Write-Host " ✅  $PrettyName installed"
+        Write-Host "$ICON_CHECK  $PrettyName installed"
         return $true
     }
     else
     {
-        Write-Warning " ❌  winget failed to install $PrettyName (exit code $LASTEXITCODE)"
+        Write-Warning "$ICON_CROSS  winget failed to install $PrettyName (exit code $LASTEXITCODE)"
         return $false
     }
 }
@@ -69,16 +78,16 @@ function Update-System-Path
         if ($oldPath -notlike "*$binFolder*")
         {
             [Environment]::SetEnvironmentVariable("PATH", "$oldPath;$binFolder", "Machine")
-            Write-Host " ✅  Added $binFolder to System PATH."
+            Write-Host "$ICON_CHECK  Added $binFolder to System PATH."
         }
         else
         {
-            Write-Host " ℹ️  Path for $PrettyName is already in System PATH."
+            Write-Host "$ICON_INFO  Path for $PrettyName is already in System PATH."
         }
     }
     else
     {
-        Write-Warning " ❌  Could not locate $CmdFile from $CmdBasePath to add to PATH with $binFolder. Please check the installation."
+        Write-Warning "$ICON_CROSS  Could not locate $CmdFile from $CmdBasePath to add to PATH with $binFolder. Please check the installation."
         exit 1
     }
 }
@@ -87,16 +96,16 @@ function Update-System-Path
 $ComputerName = $env:COMPUTERNAME
 if (-not ($ApprovedComputerNames -contains $ComputerName))
 {
-    Write-Warning " ❌  This system ($ComputerName) is not an allowed ScruthSystem™️ , aborting setup"
+    Write-Warning "$ICON_CROSS  This system ($ComputerName) is not an allowed ScruthSystem™️ , aborting setup"
     exit 1
 }
-Write-Output "🚀  Setting up ScruthSystem™️  $ComputerName"
+Write-Output "$ICON_ROCKET  Setting up ScruthSystem™️  $ComputerName"
 
 # 1Password CLI
 $ok = Install-Package-With-Winget -CheckCmd 'op' -WingetId 'AgileBits.1Password.CLI' -PrettyName '1Password CLI'
 if (-not $ok)
 {
-    Write-Warning " ❌  Please install 1Password CLI manually and re-run this script."
+    Write-Warning "$ICON_CROSS  Please install 1Password CLI manually and re-run this script."
     exit 1
 }
 Update-System-Path -CmdBasePath "$env:LOCALAPPDATA\Microsoft\WinGet\Packages\AgileBits.1Password.CLI_Microsoft.Winget.Source_8wekyb3d8bbwe" -CmdFile 'op.exe' -PrettyName '1Password CLI (op)'
@@ -105,7 +114,7 @@ Update-System-Path -CmdBasePath "$env:LOCALAPPDATA\Microsoft\WinGet\Packages\Agi
 $ok = Install-Package-With-Winget -CheckCmd 'chezmoi' -WingetId 'twpayne.chezmoi' -PrettyName 'chezmoi'
 if (-not $ok)
 {
-    Write-Warning " ❌  Please install chezmoi manually and re-run this script."
+    Write-Warning "$ICON_CROSS  Please install chezmoi manually and re-run this script."
     exit 1
 }
 Update-System-Path -CmdBasePath "$env:LOCALAPPDATA\Microsoft\WinGet\Packages\twpayne.chezmoi_Microsoft.Winget.Source_8wekyb3d8bbwe" -CmdFile 'chezmoi.exe' -PrettyName 'chezmoi'
@@ -127,38 +136,38 @@ catch
 
 if ($sourcePath -and (Test-Path $sourcePath))
 {
-    Write-Host " ℹ️  Chezmoi already initialized, pulling latest changes..."
+    Write-Host "$ICON_INFO  Chezmoi already initialized, pulling latest changes..."
     & chezmoi update
     if ($LASTEXITCODE -eq 0)
     {
-        Write-Host " ✅  chezmoi updated"
+        Write-Host "$ICON_CHECK  chezmoi updated"
     }
     else
     {
-        Write-Warning " ❌  chezmoi update returned exit code $LASTEXITCODE"
+        Write-Warning "$ICON_CROSS  chezmoi update returned exit code $LASTEXITCODE"
         exit 1
     }
 }
 else
 {
-    Write-Host " ℹ️  Chezmoi not already initialized, initializing and applying"
+    Write-Host "$ICON_INFO  Chezmoi not already initialized, initializing and applying"
     & chezmoi init $RepoToInit --branch $RepoBranch
     if ($LASTEXITCODE -ne 0)
     {
-        Write-Warning " ❌  chezmoi init failed (exit code $LASTEXITCODE)"
+        Write-Warning "$ICON_CROSS  chezmoi init failed (exit code $LASTEXITCODE)"
         exit 1
     }
 
     & chezmoi apply
     if ($LASTEXITCODE -ne 0)
     {
-        Write-Warning " ❌  chezmoi apply failed (exit code $LASTEXITCODE)"
+        Write-Warning "$ICON_CROSS  chezmoi apply failed (exit code $LASTEXITCODE)"
         exit 1
     }
-    Write-Host " ✅  Chezmoi initialized"
+    Write-Host "$ICON_CHECK  Chezmoi initialized"
 }
 
-Write-Host " 😎  Finished setting up $ComputerName"
-Write-Host " ℹ️   Set upstream to SSH rather than HTTPS via:"
-Write-Host "     chezmoi cd"
-Write-Host "     git remote set-url origin git@github.com:sbfeinstein/scruth-config.git"
+Write-Host "$ICON_GLASSES  Finished setting up $ComputerName"
+Write-Host "$ICON_INFO  Set upstream to SSH rather than HTTPS via:"
+Write-Host "    chezmoi cd"
+Write-Host "    git remote set-url origin git@github.com:sbfeinstein/scruth-config.git"
