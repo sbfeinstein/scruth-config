@@ -1,0 +1,10 @@
+# Set console to UTF8 to ensure emojis render correctly in the terminal
+$OutputEncoding = [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
+
+Get-Service ssh-agent | Set-Service -StartupType Automatic
+Start-Service ssh-agent
+{{ template "emoji_constants.ps1" . }}
+
+Write-Host "$ICON_WARNING  Adding SSH key to agent, this may output an ignorable, non-fatal error despite actually adding the key"
+& { cmd /c ssh-add {{ .chezmoi.homeDir }}/.ssh/{{ .gitSigningKey }} } 2>&1
+Write-Host "$ICON_INFO  Done adding SSH key to agent"

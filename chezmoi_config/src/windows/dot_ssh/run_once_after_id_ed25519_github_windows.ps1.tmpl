@@ -1,6 +1,0 @@
-﻿Get-Service ssh-agent | Set-Service -StartupType Automatic
-Start-Service ssh-agent
-
-Write-Host " ⚠️  Adding SSH key to agent, this is expected to output non-fatal error despite adding the key.  Ignore."
-& { cmd /c ssh-add {{ .chezmoi.homeDir }}/.ssh/{{ .gitSigningKey }} } 2>&1
-Write-Host " ℹ️  Done adding SSH key to agent"

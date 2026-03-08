@@ -1,22 +1,8 @@
-# $script = (Invoke-WebRequest https://raw.githubusercontent.com/sbfeinstein/scruth-config/refs/heads/main/setup.ps1).Content
-# Invoke-Expression "& { $script }"
-#
-# Invoke-Expression "& { $(Invoke-RestMethod https://raw.githubusercontent.com/sbfeinstein/scruth-config/refs/heads/main/setup.ps1) }"
-#
-# Get-Content -Path "setup.ps1" -Encoding UTF8 | Set-Content -Encoding UTF8 "setup_attempt.ps1"
-
-
 # Set console to UTF8 to ensure emojis render correctly in the terminal
 $OutputEncoding = [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
 
-# Define Emoji Constants using Hex codes (PS 5.1 compatible)
-$ICON_INFO    = [char]::ConvertFromUtf32(0x2139) + [char]::ConvertFromUtf32(0xFE0F)
-$ICON_CROSS   = [char]::ConvertFromUtf32(0x274C)
-$ICON_CHECK   = [char]::ConvertFromUtf32(0x2705)
-$ICON_ROCKET  = [char]::ConvertFromUtf32(0x1F680)
-$ICON_GLASSES = [char]::ConvertFromUtf32(0x1F60E)
-$ICON_TM      = [char]::ConvertFromUtf32(0x2122)
-$ICON_WRENCH  = [char]::ConvertFromUtf32(0x1F527)
+# Imports
+. ".\chezmoi_config\src\windows\.chezmoitemplates\emoji_constants.ps1"
 
 $ApprovedComputerNames = @('FAMILYFUN', 'RARSTEENS')
 $RepoToInit = 'sbfeinstein/scruth-config'
