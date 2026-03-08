@@ -3,7 +3,7 @@
 
 🚀 Its mission is to make it a delight to set up and maintain our family computers 😎!
 
-***Scruth*** == <u>Sc</u>ott + <u>Ruth</u>
+***Scruth*** == <ins>Sc</ins>ott + <ins>Ruth</ins>
 
 Windows and MacOS systems are supported and in both cases only a single, zero-parameter command is needed to run it.
 
@@ -25,7 +25,7 @@ curl -sfL https://raw.githubusercontent.com/sbfeinstein/scruth-config/refs/heads
 The script installs minimal dependencies including [homebrew](https://brew.sh/) for package management. 
 
 # Quick Start - Windows
-The `setup.ps1` script is the entry point!  In a Windows Terminal, execute:
+The `setup.ps1` script is the entry point!  In an *elevated* ("Run as administrator") Windows Terminal, execute:
 
 ```powershell
 Invoke-Expression "& { $(Invoke-RestMethod https://raw.githubusercontent.com/sbfeinstein/scruth-config/refs/heads/main/setup.ps1) }"
