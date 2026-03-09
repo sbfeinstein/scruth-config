@@ -1,6 +1,3 @@
-# Set console to UTF8 to ensure emojis render correctly in the terminal
-$OutputEncoding = [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
-
 # Define Emoji Constants using Hex codes (PS 5.1 compatible)
 # https://www.w3schools.com/charsets/ref_emoji.asp
 #

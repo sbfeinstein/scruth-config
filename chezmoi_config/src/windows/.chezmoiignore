@@ -1,0 +1,2 @@
+# Scripts to execute as part of "chezmoi apply" but should not write to disk
+chezmoi_scriptss/

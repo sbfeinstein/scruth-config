@@ -2,90 +2,11 @@
 $OutputEncoding = [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
 
 # Imports
-. ".\chezmoi_config\src\windows\.chezmoitemplates\emoji_constants.ps1"
+. ".\chezmoi_config\src\windows\.chezmoitemplates\common.ps1"
 
 $ApprovedComputerNames = @('FAMILYFUN', 'RARSTEENS')
 $RepoToInit = 'sbfeinstein/scruth-config'
 $RepoBranch = 'main'
-
-# Helper to check for a command
-function Find-Command-Exists
-{
-    param([string]$CmdName)
-    $c = Get-Command $CmdName -ErrorAction SilentlyContinue
-    if ($null -ne $c)
-    {
-        return $true
-    }
-    return $false
-}
-
-# Helper to install a package via winget
-function Install-Package-With-Winget
-{
-    param(
-        [string]$CheckCmd,
-        [string]$WingetId,
-        [string]$PrettyName
-    )
-
-    if (Find-Command-Exists $CheckCmd)
-    {
-        Write-Host "$ICON_INFO  $PrettyName already installed"
-        return $true
-    }
-
-    # Check winget
-    if (-not (Find-Command-Exists 'winget'))
-    {
-        Write-Warning "$ICON_CROSS  winget not found. Please install winget or install $PrettyName manually."
-        return $false
-    }
-
-    Write-Host "$ICON_WRENCH  Installing $PrettyName via winget (id: $WingetId) ..."
-    & winget install --accept-package-agreements --accept-source-agreements --id $WingetId
-    if ($LASTEXITCODE -eq 0)
-    {
-        Write-Host "$ICON_CHECK  $PrettyName installed"
-        return $true
-    }
-    else
-    {
-        Write-Warning "$ICON_CROSS  winget failed to install $PrettyName (exit code $LASTEXITCODE)"
-        return $false
-    }
-}
-
-# Helper to update the system path
-function Update-System-Path
-{
-    param(
-        [string]$CmdBasePath,
-        [string]$CmdFile,
-        [string]$PrettyName
-    )
-
-    $binFolder = (Get-ChildItem -Path $CmdBasePath -Filter $CmdFile -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1).DirectoryName
-
-    if ($binFolder)
-    {
-        $oldPath = [Environment]::GetEnvironmentVariable("PATH", "Machine")
-        if ($oldPath -notlike "*$binFolder*")
-        {
-            [Environment]::SetEnvironmentVariable("PATH", "$oldPath;$binFolder", "Machine")
-            Write-Host "$ICON_CHECK  Added $binFolder to System PATH."
-        }
-        else
-        {
-            Write-Host "$ICON_INFO  Path for $PrettyName is already in System PATH."
-        }
-    }
-    else
-    {
-        Write-Warning "$ICON_CROSS  Could not locate $CmdFile from $CmdBasePath to add to PATH with $binFolder. Please check the installation."
-        exit 1
-    }
-}
 
 # Hostname check
 $ComputerName = $env:COMPUTERNAME
@@ -166,3 +87,5 @@ Write-Host "$ICON_GLASSES  Finished setting up $ComputerName"
 Write-Host "$ICON_INFO  Set upstream to SSH rather than HTTPS via:"
 Write-Host "    chezmoi cd"
 Write-Host "    git remote set-url origin git@github.com:sbfeinstein/scruth-config.git"
+Write-Host "$ICON_INFO  Install Scruth-standard user-space applications via:"
+Write-Host "    winget import -i C:\Users\scott\.scruth_default_winget.json"
