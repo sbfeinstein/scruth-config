@@ -32,6 +32,9 @@
         },
         {
           "PackageIdentifier" : "AgileBits.1Password"
+        },
+        {
+          "PackageIdentifier" : "Rclone.Rclone"
         }
       ],
       "SourceDetails" :

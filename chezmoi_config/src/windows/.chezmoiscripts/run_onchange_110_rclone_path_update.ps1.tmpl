@@ -1,0 +1,4 @@
+{{ template "common.ps1" . }}
+
+# WinGet install of RClone doesn't correctly add it to the path
+Update-System-Path -CmdBasePath "$env:LOCALAPPDATA\Microsoft\WinGet\Packages\Rclone.Rclone_Microsoft.Winget.Source_8wekyb3d8bbwe" -CmdFile 'rclone.exe' -PrettyName 'rclone'
