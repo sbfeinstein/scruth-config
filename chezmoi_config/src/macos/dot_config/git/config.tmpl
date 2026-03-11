@@ -10,5 +10,7 @@
 	allowedSignersFile = {{ .chezmoi.homeDir }}/.ssh/allowed_signers
 [init]
 	defaultBranch = main
+{{- if eq .chezmoi.os "windows" }}
 [core]
 	sshCommand = C:/Windows/System32/OpenSSH/ssh.exe
+{{- end }}
