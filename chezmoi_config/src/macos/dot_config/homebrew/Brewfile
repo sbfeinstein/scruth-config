@@ -19,7 +19,7 @@ cask "1password-cli"
 # Tool to customise input devices and automate computer systems
 cask "bettertouchtool"
 cask "font-jetbrains-mono-nerd-font"
-# Game development engine
+# 2D and 3D game engine
 cask "godot"
 # Web browser
 cask "google-chrome"
