@@ -1,0 +1,50 @@
+{
+  "$schema" : "https://aka.ms/winget-packages.schema.2.0.json",
+  "CreationDate" : "2026-03-08T22:27:56.061-00:00",
+  "Sources" :
+  [
+    {
+      "Packages" :
+      [
+        {
+          "PackageIdentifier" : "7zip.7zip"
+        },
+        {
+          "PackageIdentifier" : "Google.Chrome.EXE"
+        },
+        {
+          "PackageIdentifier" : "HandBrake.HandBrake"
+        },
+        {
+          "PackageIdentifier" : "VideoLAN.VLC"
+        },
+        {
+          "PackageIdentifier" : "Spotify.Spotify"
+        },
+        {
+          "PackageIdentifier" : "Zoom.Zoom.EXE"
+        },
+        {
+          "PackageIdentifier" : "AgileBits.1Password"
+        },
+        {
+          "PackageIdentifier" : "Rclone.Rclone"
+        },
+        {
+          "PackageIdentifier" : "Gyan.FFmpeg"
+        },
+        {
+          "PackageIdentifier" : "GuinpinSoft.MakeMKV"
+        }
+      ],
+      "SourceDetails" :
+      {
+        "Argument" : "https://cdn.winget.microsoft.com/cache",
+        "Identifier" : "Microsoft.Winget.Source_8wekyb3d8bbwe",
+        "Name" : "winget",
+        "Type" : "Microsoft.PreIndexed.Package"
+      }
+    }
+  ],
+  "WinGetVersion" : "1.12.470"
+}
