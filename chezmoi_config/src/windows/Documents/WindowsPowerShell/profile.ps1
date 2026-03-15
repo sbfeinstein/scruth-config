@@ -4,14 +4,8 @@
 Remove-Item Alias:gc -Force
 Remove-Item Alias:gp -Force
 
-# Non-git helpers
+# Aliases
 function chez { chezmoi apply }
-function st  { subl @args }
-
-# Git helpers
-function git_current_branch {
-    git rev-parse --abbrev-ref HEAD
-}
 
 function gaa { git add --all @args }
 function gst { git status @args }
@@ -32,4 +26,20 @@ function grbc { git rebase --continue @args }
 function grbi { git rebase -i @args }
 function groh {
     git reset origin/$(git_current_branch) --hard @args
+}
+
+function st  { subl @args }
+
+# Alias helpers
+function git_current_branch {
+    git rev-parse --abbrev-ref HEAD
+}
+
+# Utilities
+function Get-MakeMKVBetaKey {
+    $url = "https://forum.makemkv.com/forum/viewtopic.php?f=5&t=1053"
+    $response = Invoke-WebRequest -Uri $url -UseBasicParsing
+    if ($response.Content -match '<code>(.*?)</code>') {
+        Write-Output $Matches[1].Trim()
+    }
 }
