@@ -1,0 +1,13 @@
+{{ template "emoji_constants.ps1" . }}
+
+$targetTask = Get-ScheduledTask -TaskPath "\Scott tasks\" -TaskName "Test Task" -ErrorAction SilentlyContinue
+
+if (-not $targetTask) {
+    Write-Host "$ICON_INFO  Creating scruth-backup in Task Scheduler"
+    $taskXmlDef = {{ joinPath .chezmoi.homeDir "utilities/scruth-backup/test_task.xml" | quote }}
+    $pwd = op read "op://kmhwtn4fzf2vhyq3luti556edu/Microsoft - Scott/password"
+    schtasks.exe /Create /XML $taskXmlDef /tn "\Scott tasks\Test Task" /F /RP $pwd /RU 'scott'
+    Write-Host "$ICON_CHECK  Done creating scruth-backup in Task Scheduler"
+}  else {
+    Write-Verbose "$ICON_INFO  Skipping scruth-backup in Task Scheduler since it already exists"
+}

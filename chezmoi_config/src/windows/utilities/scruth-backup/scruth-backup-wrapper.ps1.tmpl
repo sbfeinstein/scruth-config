@@ -4,4 +4,4 @@ $secure = Get-Content $1pwdTokenPath | ConvertTo-SecureString
 $ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
 $plain = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($ptr)
 
-$Env:OP_SERVICE_ACCOUNT_TOKEN = $plain; & C:\Users\scott\utilities\scruth-backup.ps1; Remove-Item Env:\OP_SERVICE_ACCOUNT_TOKEN
+$Env:OP_SERVICE_ACCOUNT_TOKEN = $plain; & C:\Users\scott\utilities\scruth-backup\scruth-backup.ps1; Remove-Item Env:\OP_SERVICE_ACCOUNT_TOKEN
