@@ -87,6 +87,7 @@ else
 
     # Switch git to SSH since chezmoi init uses HTTPS
     git -C "$HOME/.local/share/chezmoi" remote set-url origin git@github.com:sbfeinstein/scruth-config.git
+    Write-Host "$ICON_CHECK  Forced git to SSH for ~/.local/share/chezmoi"
 }
 
 Write-Host "$ICON_GLASSES  Finished setting up $ComputerName"
