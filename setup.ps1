@@ -1,8 +1,9 @@
 # Set console to UTF8 to ensure emojis render correctly in the terminal
-$OutputEncoding = [Console]::OutputEncoding = [System.Text.UTF8Encoding]::new()
+$OutputEncoding = [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding($false)
 
 # Imports
 . ".\chezmoi_config\src\windows\.chezmoitemplates\common.ps1"
+. ".\chezmoi_config\src\windows\.chezmoitemplates\emoji_constants.ps1"
 
 $ApprovedComputerNames = @('FAMILYFUN', 'RARSTEENS')
 $RepoToInit = 'sbfeinstein/scruth-config'
@@ -15,7 +16,9 @@ if (-not ($ApprovedComputerNames -contains $ComputerName))
     Write-Warning "$ICON_CROSS  This system ($ComputerName) is not an allowed ScruthSystem$ICON_TM, aborting setup"
     exit 1
 }
-Write-Output "$ICON_ROCKET  Setting up ScruthSystem$ICON_TM $ComputerName"
+Write-Horizontal-Rule
+Write-Output "$ICON_ROCKET  Setting up ScruthSystem$ICON_TM $ComputerName, a Windows computer"
+Write-Horizontal-Rule
 
 # 1Password CLI
 $ok = Install-Package-With-Winget -CheckCmd 'op' -WingetId 'AgileBits.1Password.CLI' -PrettyName '1Password CLI'
@@ -81,11 +84,15 @@ else
         exit 1
     }
     Write-Host "$ICON_CHECK  Chezmoi initialized"
+
+    # Switch git to SSH since chezmoi init uses HTTPS
+    git -C "$HOME/.local/share/chezmoi" remote set-url origin git@github.com:sbfeinstein/scruth-config.git
 }
 
 Write-Host "$ICON_GLASSES  Finished setting up $ComputerName"
-Write-Host "$ICON_INFO  Set upstream to SSH rather than HTTPS via:"
-Write-Host "    chezmoi cd"
-Write-Host "    git remote set-url origin git@github.com:sbfeinstein/scruth-config.git"
-Write-Host "$ICON_INFO  Install Scruth-standard user-space applications via:"
-Write-Host "    winget import -i C:\Users\scott\.scruth_default_winget.json"
+Write-Horizontal-Rule
+Write-Host "$ICON_MAGE  Additional steps to do manually!"
+Write-Host "    $UNICODE_BULLET In a non-elevated Terminal, install user-space applications via either: "
+Write-Host "      $UNICODE_BULLET winget import -i C:\Users\scott\.scruth_default_winget.json"
+Write-Host "      $UNICODE_BULLET winget import -i C:\Users\scott\.scruth_minimal_winget.json"
+Write-Horizontal-Rule

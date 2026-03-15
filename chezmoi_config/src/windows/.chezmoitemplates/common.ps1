@@ -1,5 +1,7 @@
 # Imports
+@'
 {{ template "emoji_constants.ps1" . }}
+'@ | Out-Null
 
 function Update-System-Path
 {
@@ -76,4 +78,9 @@ function Install-Package-With-Winget
         Write-Warning "$ICON_CROSS  winget failed to install $PrettyName (exit code $LASTEXITCODE)"
         return $false
     }
+}
+
+function Write-Horizontal-Rule
+{
+    Write-Host ($UNICODE_EMDASH * $Host.UI.RawUI.WindowSize.Width) -ForegroundColor DarkCyan
 }
