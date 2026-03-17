@@ -94,6 +94,6 @@ Write-Host "$ICON_GLASSES  Finished setting up $ComputerName"
 Write-Horizontal-Rule
 Write-Host "$ICON_MAGE  Additional steps to do manually!"
 Write-Host "    $UNICODE_BULLET In a non-elevated Terminal, install user-space applications via either: "
-Write-Host "      $UNICODE_BULLET winget import -i C:\Users\scott\.scruth_default_winget.json"
-Write-Host "      $UNICODE_BULLET winget import -i C:\Users\scott\.scruth_minimal_winget.json"
+Write-Host "      $UNICODE_BULLET winget import -i C:\Users\scott\.scruth_default_winget.json [alias Install-WinGetDefault]"
+Write-Host "      $UNICODE_BULLET winget import -i C:\Users\scott\.scruth_minimal_winget.json [alias Install-WinGetMinimal]"
 Write-Horizontal-Rule

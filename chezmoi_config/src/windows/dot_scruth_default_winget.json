@@ -41,6 +41,9 @@
         },
         {
           "PackageIdentifier" : "GuinpinSoft.MakeMKV"
+        },
+        {
+          "PackageIdentifier" : "geeksoftwareGmbH.PDF24Creator"
         }
       ],
       "SourceDetails" :
