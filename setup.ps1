@@ -10,8 +10,6 @@ $emoji = Invoke-RestMethod "https://raw.githubusercontent.com/sbfeinstein/scruth
 . ([ScriptBlock]::Create($emoji))
 
 $ApprovedComputerNames = @('CRAFTINGISSEXY', 'FAMILYFUN', 'RARSTEENS')
-$RepoToInit = 'sbfeinstein/scruth-config'
-$RepoBranch = 'main'
 
 # Hostname check
 $ComputerName = $env:COMPUTERNAME
@@ -42,57 +40,20 @@ if (-not $ok)
 }
 Update-System-Path -CmdBasePath "$env:LOCALAPPDATA\Microsoft\WinGet\Packages\twpayne.chezmoi_Microsoft.Winget.Source_8wekyb3d8bbwe" -CmdFile 'chezmoi.exe' -PrettyName 'chezmoi'
 
-# chezmoi init or update
-$sourcePath = $null
-try
-{
-    $raw = & chezmoi source-path 2>&1
-    if ($LASTEXITCODE -eq 0)
-    {
-        $sourcePath = $raw.Trim()
-    }
-}
-catch
-{
-    $sourcePath = $null
-}
+# Run the remainder of the script in an elevated context.
+$child = Join-Path $PSScriptRoot 'setup\setup_chezmoi.ps1'
 
-if ($sourcePath -and (Test-Path $sourcePath))
-{
-    Write-Host "$ICON_INFO  Chezmoi already initialized, pulling latest changes..."
-    & chezmoi update
-    if ($LASTEXITCODE -eq 0)
-    {
-        Write-Host "$ICON_CHECK  chezmoi updated"
-    }
-    else
-    {
-        Write-Warning "$ICON_CROSS  chezmoi update returned exit code $LASTEXITCODE"
-        exit 1
-    }
-}
-else
-{
-    Write-Host "$ICON_INFO  Chezmoi not already initialized, initializing and applying"
-    & chezmoi init $RepoToInit --branch $RepoBranch
-    if ($LASTEXITCODE -ne 0)
-    {
-        Write-Warning "$ICON_CROSS  chezmoi init failed (exit code $LASTEXITCODE)"
-        exit 1
-    }
+# Launch elevated and wait
+$psi = New-Object System.Diagnostics.ProcessStartInfo
+$psi.FileName = 'powershell.exe'
+$psi.Arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$child`""
+$psi.Verb = 'runas'   # <-- triggers elevation
+$psi.UseShellExecute = $true
 
-    & chezmoi apply
-    if ($LASTEXITCODE -ne 0)
-    {
-        Write-Warning "$ICON_CROSS  chezmoi apply failed (exit code $LASTEXITCODE)"
-        exit 1
-    }
-    Write-Host "$ICON_CHECK  Chezmoi initialized"
-
-    # Switch git to SSH since chezmoi init uses HTTPS
-    git -C "$HOME/.local/share/chezmoi" remote set-url origin git@github.com:sbfeinstein/scruth-config.git
-    Write-Host "$ICON_CHECK  Forced git to SSH for ~/.local/share/chezmoi"
-}
+Write-Host "$ICON_INFO  Initializing and applying chezmoi in an elevated context"
+$proc = [System.Diagnostics.Process]::Start($psi)
+$proc.WaitForExit()
+Write-Host "$ICON_CHECK  Done initializing and applying chezmoi in an elevated context"
 
 Write-Host "$ICON_GLASSES  Finished setting up $ComputerName"
 Write-Horizontal-Rule

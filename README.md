@@ -25,7 +25,7 @@ curl -sfL https://raw.githubusercontent.com/sbfeinstein/scruth-config/refs/heads
 The script installs minimal dependencies including [homebrew](https://brew.sh/) for package management. 
 
 # Quick Start - Windows
-The `setup.ps1` script is the entry point!  In an *elevated* ("Run as administrator") Windows Terminal, execute:
+The `setup.ps1` script is the entry point!  In a regular (not elevated to Administrator) Windows Terminal, execute:
 
 ```powershell
 Invoke-Expression "& { $(Invoke-RestMethod https://raw.githubusercontent.com/sbfeinstein/scruth-config/refs/heads/main/setup.ps1) }"
