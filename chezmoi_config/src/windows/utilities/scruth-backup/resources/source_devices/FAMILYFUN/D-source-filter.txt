@@ -1,0 +1,11 @@
+# rclone filters are used to select what to back up
+
+# Include specific files and folders of interest
++ /books/**
++ /family media archives/**
++ /Feinstein Imagination Art/**
++ /from work mac/**
++ /Information/**
+
+# Exclude everything else
+- *

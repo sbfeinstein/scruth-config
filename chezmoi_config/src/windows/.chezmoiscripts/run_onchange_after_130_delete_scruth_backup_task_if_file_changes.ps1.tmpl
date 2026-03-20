@@ -1,0 +1,18 @@
+{{ template "emoji_constants.ps1" . }}
+
+# If any of these other files change, we want to delete and recreate the Task Scheduler task.
+# {{ include (joinPath .chezmoi.homeDir "utilities/scruth-backup/test_task.xml") | sha256sum }}
+# {{ include (joinPath .chezmoi.homeDir "utilities/scruth-backup/test-backup.ps1") | sha256sum }}
+# {{ include (joinPath .chezmoi.homeDir "utilities/scruth-backup/test-backup-wrapper.ps1") | sha256sum }}
+
+$taskFolder = "\Scott tasks\"
+$taskName = "scruth-backup"
+$taskFullName = $taskFolder + $taskName
+
+$targetTask = Get-ScheduledTask -TaskPath $taskFolder -TaskName $taskName -ErrorAction SilentlyContinue
+
+if ($targetTask) {
+    Write-Host "$ICON_INFO  Deleting existing $taskFullName in Task Scheduler"
+    schtasks.exe /delete /tn $taskFullName /f
+    Write-Host "$ICON_CHECK  Done deleting existing $taskFullName in Task Scheduler"
+}

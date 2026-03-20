@@ -49,7 +49,7 @@
   <Actions>
     <Exec>
       <Command>C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe</Command>
-      <Arguments>{{ joinPath .chezmoi.homeDir "utilities/scruth-backup/scruth-backup-wrapper.ps1" }}</Arguments>
+      <Arguments>{{ joinPath .chezmoi.homeDir "utilities/scruth-backup/backup-scruth-device-wrapper.ps1" }} -ComputerParam {{ .chezmoi.hostname }}</Arguments>
       <WorkingDirectory>{{ joinPath .chezmoi.homeDir "utilities/scruth-backup/" }}</WorkingDirectory>
     </Exec>
   </Actions>

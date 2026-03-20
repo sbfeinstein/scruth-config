@@ -1,0 +1,15 @@
+# rclone filters are used to select what to back up
+
+# Exclude always
+- .git/**
+- .idea/**
+- .vscode/**
+
+# Include specific files and folders of interest
++ /Users/scott/Desktop/**
+
+# task scheduler tasks
++ /Windows/System32/Tasks/+Scott tasks
+
+# Exclude everything else
+- *

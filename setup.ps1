@@ -5,7 +5,7 @@ $OutputEncoding = [Console]::OutputEncoding = New-Object System.Text.UTF8Encodin
 . ".\chezmoi_config\src\windows\.chezmoitemplates\common.ps1"
 . ".\chezmoi_config\src\windows\.chezmoitemplates\emoji_constants.ps1"
 
-$ApprovedComputerNames = @('FAMILYFUN', 'RARSTEENS')
+$ApprovedComputerNames = @('CRAFTINGISSEXY', 'FAMILYFUN', 'RARSTEENS')
 $RepoToInit = 'sbfeinstein/scruth-config'
 $RepoBranch = 'main'
 
