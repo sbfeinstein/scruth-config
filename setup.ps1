@@ -1,9 +1,13 @@
 # Set console to UTF8 to ensure emojis render correctly in the terminal
 $OutputEncoding = [Console]::OutputEncoding = New-Object System.Text.UTF8Encoding($false)
 
-# Imports
-. ".\chezmoi_config\src\windows\.chezmoitemplates\common.ps1"
-. ".\chezmoi_config\src\windows\.chezmoitemplates\emoji_constants.ps1"
+# Load common.ps1
+$common = Invoke-RestMethod "https://raw.githubusercontent.com/sbfeinstein/scruth-config/main/chezmoi_config/src/windows/.chezmoitemplates/common.ps1"
+. ([ScriptBlock]::Create($common))
+
+# Load emoji_constants.ps1
+$emoji = Invoke-RestMethod "https://raw.githubusercontent.com/sbfeinstein/scruth-config/main/chezmoi_config/src/windows/.chezmoitemplates/emoji_constants.ps1"
+. ([ScriptBlock]::Create($emoji))
 
 $ApprovedComputerNames = @('CRAFTINGISSEXY', 'FAMILYFUN', 'RARSTEENS')
 $RepoToInit = 'sbfeinstein/scruth-config'
