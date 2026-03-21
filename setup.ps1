@@ -40,21 +40,44 @@ if (-not $ok)
 }
 Update-System-Path -CmdBasePath "$env:LOCALAPPDATA\Microsoft\WinGet\Packages\twpayne.chezmoi_Microsoft.Winget.Source_8wekyb3d8bbwe" -CmdFile 'chezmoi.exe' -PrettyName 'chezmoi'
 
+###############################################################################
 # Run the remainder of the script in an elevated context.
-$child = Join-Path $PSScriptRoot 'setup\setup_chezmoi.ps1'
-
-# Launch elevated and wait
-$psi = New-Object System.Diagnostics.ProcessStartInfo
-$psi.FileName = 'powershell.exe'
-$psi.Arguments = "-NoProfile -ExecutionPolicy Bypass -File `"$child`""
-$psi.Verb = 'runas'   # <-- triggers elevation
-$psi.UseShellExecute = $true
-
+###############################################################################
 Write-Host "$ICON_INFO  Initializing and applying chezmoi in an elevated context"
-$proc = [System.Diagnostics.Process]::Start($psi)
-$proc.WaitForExit()
-Write-Host "$ICON_CHECK  Done initializing and applying chezmoi in an elevated context"
 
+$url  = "https://raw.githubusercontent.com/sbfeinstein/scruth-config/refs/heads/main/setup/windows/setup_chezmoi.ps1"
+$epochMs = [int64]([DateTimeOffset]::Now.ToUnixTimeMilliseconds())
+$temp = "$env:TEMP\scruth-config_setup_chezmoi_$epochMs.ps1"
+$log = "$env:TEMP\scruth-config_setup_chezmoi_$epochMs.log"
+
+# Download the script from GitHub
+Invoke-WebRequest -Uri $url -OutFile $temp
+
+# Create the log as this parent process, so it can read it later.
+# Wouldn't have access to a file created by the elevated command below.
+New-Item -Path $log -ItemType File -Force | Out-Null
+Clear-Content $log
+
+# Execute the chezmoi setup script from an elevated process
+$cmd = @"
+& `"$temp`"
+"@
+$proc = Start-Process powershell.exe `
+    -ArgumentList @(
+    "-NoProfile"
+    "-ExecutionPolicy Bypass"
+    "-Command $cmd"
+    "*>`"$log`""
+) `
+    -Verb RunAs `
+    -PassThru `
+    -WindowStyle Hidden
+
+# Tail the log while the elevated process runs, and wait for it to end
+Get-Content -Path $log -Wait
+Wait-Process -Id $proc.Id
+
+Write-Host "$ICON_CHECK  Done initializing and applying chezmoi in an elevated context"
 Write-Host "$ICON_GLASSES  Finished setting up $ComputerName"
 Write-Horizontal-Rule
 Write-Host "$ICON_MAGE  Additional steps to do manually!"
