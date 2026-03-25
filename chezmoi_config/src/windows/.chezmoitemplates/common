@@ -1,0 +1,163 @@
+{{ template "emoji_constants" . }}
+
+function Ensure-SystemPathEntry {
+    param(
+        [string]$CmdBasePath,
+        [string]$CmdFile,
+        [string]$PrettyName
+    )
+    if (-not $CmdBasePath) {
+        Write-Warning "$ICON_CROSS  $PrettyName is not managed by WinGet so can't enforce it being in the System Path"
+        return
+    }
+
+    $binFolder = (Get-ChildItem -Path $CmdBasePath -Filter $CmdFile -Recurse -ErrorAction SilentlyContinue | Select-Object -First 1).DirectoryName
+    if (-not $binFolder) {
+        Write-Warning "$ICON_CROSS  Could not locate $CmdFile from $CmdBasePath to add to PATH with $binFolder. Please check the installation."
+        return
+    }
+
+    $oldPath = [Environment]::GetEnvironmentVariable("PATH", "Machine")
+
+    if ($oldPath -notlike "*$binFolder*") {
+        # Write old path to a file for safety's sake
+        $pathHistoryFile = {{ joinPath .chezmoi.homeDir ".scruth-config/system_path_history.log" | quote }}
+        Add-Content -Path $pathHistoryFile -Value "$(Get-Date)`n$oldPath`n`n"
+
+        # Must use a ScriptBlock to evaluate the vars using the current process
+        $newPathValue = "$oldPath;$binFolder"
+        $action = [ScriptBlock]::Create("
+            [Environment]::SetEnvironmentVariable('PATH', '$newPathValue', 'Machine')
+        ")
+        $params = @{
+            DisplayLabel = "ensuring system path element for $PrettyName"
+            Command = $action
+        }
+        Invoke-ElevatedCommand @params
+    } else {
+        Write-Verbose "$ICON_INFO  Path for $PrettyName is already in System PATH."
+    }
+}
+
+function Find-InstallLocation {
+    param(
+        [string]$Pkg
+    )
+    return winget list --details -e $Pkg |
+            Select-String 'Installed Location:' |
+            ForEach-Object { $_.ToString().Split(':', 2)[1].Trim() }
+}
+
+function Install-WingetPackage {
+    param(
+        [string]$CheckCmd,
+        [string]$WingetId,
+        [string]$PrettyName,
+        [string]$OtherParameters = ""
+    )
+
+    if (Test-CommandExists $CheckCmd) {
+        Write-Output "$ICON_INFO  $PrettyName already installed"
+        return $true
+    }
+
+    # Check winget
+    if (-not (Test-CommandExists 'winget')) {
+        Write-Warning "$ICON_CROSS  winget not found. Please install winget or install $PrettyName manually."
+        return $false
+    }
+
+    Write-Output "$ICON_WRENCH  Installing $PrettyName via winget (id: $WingetId) ..."
+    & winget install --accept-package-agreements --accept-source-agreements --id $WingetId $OtherParameters
+    if ($LASTEXITCODE -eq 0) {
+        Write-Output "$ICON_CHECK  $PrettyName installed"
+        return $true
+    }
+    else {
+        Write-Warning "$ICON_CROSS  winget failed to install $PrettyName (exit code $LASTEXITCODE)"
+        return $false
+    }
+}
+
+function Invoke-ElevatedCommand {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$DisplayLabel,
+
+        [Parameter(Mandatory)]
+        [Alias('Script', 'Command')]
+        $Cmd,
+
+        [switch]$Quiet
+    )
+
+    #
+    # Normalize the command into a single string
+    #
+    if ($Cmd -is [scriptblock]) {
+        $cmdString = $Cmd.ToString()
+    } elseif ($Cmd -is [string]) {
+        $cmdString = $Cmd
+    } else {
+        throw "Unsupported command type: $( $Cmd.GetType().FullName )"
+    }
+
+    #
+    # Create a readable log file owned by the unelevated user
+    #
+    $epochMs = [int64]([DateTimeOffset]::Now.ToUnixTimeMilliseconds())
+    $log = Join-Path $env:TEMP "scruth-config_elevated_$epochMs.log"
+    New-Item -Path $log -ItemType File -Force | Out-Null
+    Clear-Content $log
+
+    if (-not $Quiet) {
+        Write-Output "$ICON_INFO  Executing elevated script for $DisplayLabel, logging to $log..."
+    }
+
+    #
+    # Build the elevated command string
+    #
+    $escaped = $cmdString.Replace('"', '\"')
+    $full = @"
+& { $escaped } | Tee-Object -FilePath '$log'
+"@
+
+    #
+    # Launch elevated PowerShell
+    #
+    $proc = Start-Process powershell.exe `
+        -ArgumentList @(
+        "-NoProfile"
+        "-ExecutionPolicy Bypass"
+        "-Command $full"
+    ) `
+        -Verb RunAs `
+        -PassThru `
+        -Wait
+
+    Get-Content -Path $log
+    $exit = $proc.ExitCode
+
+    if (-not $Quiet) {
+        Write-Output "$ICON_CHECK  Done $DisplayLabel (exit $exit)."
+    }
+}
+
+function Test-CommandExists {
+    param([string]$CmdName)
+    $c = Get-Command $CmdName -ErrorAction SilentlyContinue
+    if ($null -ne $c) {
+        return $true
+    }
+    return $false
+}
+
+function Test-IsAdmin {
+    $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
+    return $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+function Write-HorizontalRule {
+    Write-Output ($UNICODE_EMDASH * $Host.UI.RawUI.WindowSize.Width) -ForegroundColor DarkCyan
+}

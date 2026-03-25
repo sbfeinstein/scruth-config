@@ -6,9 +6,11 @@
     {
       "Packages" :
       [
+        {{ if .devbox }}
         {
           "PackageIdentifier" : "JetBrains.IntelliJIDEA"
         },
+        {{ end }}
         {
           "PackageIdentifier" : "7zip.7zip"
         },
@@ -44,7 +46,10 @@
         },
         {
           "PackageIdentifier" : "geeksoftwareGmbH.PDF24Creator"
-        }
+        },
+        {
+          "PackageIdentifier" : "SublimeHQ.SublimeText.4"
+        },
       ],
       "SourceDetails" :
       {

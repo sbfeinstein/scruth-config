@@ -1,10 +1,10 @@
-{{ template "emoji_constants.ps1" . }}
+{{ template "emoji_constants" . }}
 
 # Force this onchange script to re-run if key is modified: {{ include (joinPath .chezmoi.homeDir ".ssh" .gitSigningKey) | sha256sum }}
 
 Get-Service ssh-agent | Set-Service -StartupType Automatic
 Start-Service ssh-agent
 
-Write-Host "$ICON_WARNING  Adding SSH key to agent, this may output an ignorable, non-fatal error despite actually adding the key"
+Write-Output "$ICON_WARNING  Adding SSH key to agent, this may output an ignorable, non-fatal error despite actually adding the key"
 & { cmd /c ssh-add {{ .chezmoi.homeDir }}/.ssh/{{ .gitSigningKey }} } 2>&1
-Write-Host "$ICON_INFO  Done adding SSH key to agent"
+Write-Output "$ICON_INFO  Done adding SSH key to agent"

@@ -25,11 +25,11 @@ catch
 
 if ($sourcePath -and (Test-Path $sourcePath))
 {
-    Write-Host "$ICON_INFO  Chezmoi already initialized, pulling latest changes..."
+    Write-Output "$ICON_INFO  Chezmoi already initialized, pulling latest changes..."
     & chezmoi update
     if ($LASTEXITCODE -eq 0)
     {
-        Write-Host "$ICON_CHECK  chezmoi updated"
+        Write-Output "$ICON_CHECK  chezmoi updated"
     }
     else
     {
@@ -39,7 +39,7 @@ if ($sourcePath -and (Test-Path $sourcePath))
 }
 else
 {
-    Write-Host "$ICON_INFO  Chezmoi not already initialized, initializing and applying"
+    Write-Output "$ICON_INFO  Chezmoi not already initialized, initializing and applying"
     & chezmoi init $RepoToInit --branch $RepoBranch
     if ($LASTEXITCODE -ne 0)
     {
@@ -59,9 +59,9 @@ else
     # the config is out of sync.
     & chezmoi init
 
-    Write-Host "$ICON_CHECK  Chezmoi initialized"
+    Write-Output "$ICON_CHECK  Chezmoi initialized"
 
     # Switch git to SSH since chezmoi init uses HTTPS
     git -C "$HOME/.local/share/chezmoi" remote set-url origin git@github.com:sbfeinstein/scruth-config.git
-    Write-Host "$ICON_CHECK  Forced git to SSH for ~/.local/share/chezmoi"
+    Write-Output "$ICON_CHECK  Forced git to SSH for ~/.local/share/chezmoi"
 }

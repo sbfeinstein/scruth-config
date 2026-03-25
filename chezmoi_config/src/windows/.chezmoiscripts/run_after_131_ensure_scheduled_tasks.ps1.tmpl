@@ -1,0 +1,26 @@
+{{ template "common" . }}
+
+$taskFolder = "\Scott tasks\"
+$taskName = "scruth-backup"
+$taskFullName = $taskFolder + $taskName
+
+$targetTask = Get-ScheduledTask -TaskPath $taskFolder -TaskName $taskName -ErrorAction SilentlyContinue
+
+if ($targetTask) {
+    Write-Verbose "$ICON_INFO  Skipping creating $taskFullName in Task Scheduler since it already exists"
+    return
+}
+
+$taskXmlDef = {{ joinPath .chezmoi.homeDir "utilities/scruth-backup/backup-scruth-task.xml" | quote }}
+$pwd = op read "op://kmhwtn4fzf2vhyq3luti556edu/Microsoft - Scott/password"
+
+# Must use a ScriptBlock to evaluate the vars using the current process
+$action = [ScriptBlock]::Create("
+    schtasks.exe /create /xml '$taskXmlDef' /tn '$taskFullName' /f /rp '$pwd' /ru 'scott'
+    sleep(10)
+")
+$params = @{
+    DisplayLabel = "creating $taskFullName in Task Scheduler"
+    Command = $action
+}
+Invoke-ElevatedCommand @params

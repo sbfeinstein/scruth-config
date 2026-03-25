@@ -1,6 +1,6 @@
-{{ template "emoji_constants.ps1" . }}
+{{ template "common" . }}
 
-# If any of these other files change, we want to delete and recreate the Task Scheduler task.
+# If any of these other files change (this is a "run_onchange_" script), we want to delete and recreate the Task Scheduler task.
 # {{ include (joinPath .chezmoi.homeDir "utilities/scruth-backup/test_task.xml") | sha256sum }}
 # {{ include (joinPath .chezmoi.homeDir "utilities/scruth-backup/test-backup.ps1") | sha256sum }}
 # {{ include (joinPath .chezmoi.homeDir "utilities/scruth-backup/test-backup-wrapper.ps1") | sha256sum }}
@@ -12,7 +12,11 @@ $taskFullName = $taskFolder + $taskName
 $targetTask = Get-ScheduledTask -TaskPath $taskFolder -TaskName $taskName -ErrorAction SilentlyContinue
 
 if ($targetTask) {
-    Write-Host "$ICON_INFO  Deleting existing $taskFullName in Task Scheduler"
-    schtasks.exe /delete /tn $taskFullName /f
-    Write-Host "$ICON_CHECK  Done deleting existing $taskFullName in Task Scheduler"
+    $params = @{
+        DisplayLabel = "deleting existing $taskFullName in Task Scheduler"
+        Command = {
+            schtasks.exe /delete /tn $taskFullName /f
+        }
+    }
+    Invoke-ElevatedCommand @params
 }

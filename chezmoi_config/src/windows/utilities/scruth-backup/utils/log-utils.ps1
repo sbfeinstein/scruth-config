@@ -9,7 +9,7 @@ function Get-TimeStampString {
 }
 
 # Function to print hash table entries recursively and handle lists of objects
-function Write-Host-HashTable {
+function Write-Output-HashTable {
     param (
         [hashtable]$HashTable,
         [string]$Indent = "  "
@@ -18,20 +18,20 @@ function Write-Host-HashTable {
     foreach ($key in $HashTable.Keys) {
         $value = $HashTable[$key]
         if ($value -is [hashtable]) {
-            Write-Host "${Indent}${key}:"
-            Write-Host-HashTable -HashTable $value -Indent "  $Indent"
+            Write-Output "${Indent}${key}:"
+            Write-Output-HashTable -HashTable $value -Indent "  $Indent"
         } elseif ($value -is [System.Collections.IList]) {
-            Write-Host "$Indent$key (List):"
+            Write-Output "$Indent$key (List):"
             $value | ForEach-Object {
                 if ($_ -is [hashtable]) {
-                    Write-Host "$Indent  - Item:"
-                    Write-Host-HashTable -HashTable $_ -Indent "    $Indent"
+                    Write-Output "$Indent  - Item:"
+                    Write-Output-HashTable -HashTable $_ -Indent "    $Indent"
                 } else {
-                    Write-Host "$Indent  - $_"
+                    Write-Output "$Indent  - $_"
                 }
             }
         } else {
-            Write-Host "${Indent}${key}: $value"
+            Write-Output "${Indent}${key}: $value"
         }
     }
 }

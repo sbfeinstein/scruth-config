@@ -11,10 +11,12 @@
 + /Users/rllor/Documents/**
 + /Users/rllor/Pictures/**
 + /Users/ruben/Downloads/**
++ /Users/scott/.scruth-config/**
 + /Users/scott/.ssh/**
 + /Users/scott/AppData/Roaming/Thunderbird/Profiles/**
 + /Users/scott/Desktop/**
 + /Users/scott/Documents/eM Client/**
++ /Users/scott/Documents/mSecure/**
 + /Users/scott/source/**
 
 # task scheduler tasks

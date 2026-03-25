@@ -8,7 +8,7 @@
 # For files being rendered by chezmoi, this can be included as a template.
 # https://www.chezmoi.io/user-guide/templating/#using-chezmoitemplates
 # e.g. (remomove the comments /* */ since they are here to prevent expansion)
-# {{/* template "emoji_constants.ps1" . */}}
+# {{/* template "emoji_constants" . */}}
 #
 # It can also be directly Powershell-sourced into a ps1 script.
 # In this case the relative path needs to be adjusted to be correct.

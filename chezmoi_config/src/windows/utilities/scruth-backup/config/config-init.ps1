@@ -29,8 +29,8 @@ function Initialize-Config {
     $mergedSettings['destination_mac_address'] = $destinationSettings['mac_address']
     $mergedSettings['destination_root_path'] = $destinationSettings['destination_root_path']
 
-    Write-Host "Initialized config:"
-    Write-Host-HashTable -HashTable $mergedSettings
+    Write-Output "Initialized config:"
+    Write-Output-HashTable -HashTable $mergedSettings
 
     return $mergedSettings
 }

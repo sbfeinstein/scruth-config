@@ -1,0 +1,16 @@
+{{ template "common" . }}
+
+# System Path updates get their own file since we always want to check for and
+# "repair" if necessary paths are missing.
+
+# git
+$gitPath = Find-InstallLocation 'Git.Git'
+Ensure-SystemPathEntry -CmdBasePath $gitPath -CmdFile 'git.exe' -PrettyName 'git'
+
+# rclone
+$rclonePath = Find-InstallLocation 'Rclone.Rclone'
+Ensure-SystemPathEntry -CmdBasePath $rclonePath  -CmdFile 'rclone.exe' -PrettyName 'rclone'
+
+# sublime
+$sublPath = Find-InstallLocation 'SublimeHQ.SublimeText.4'
+Ensure-SystemPathEntry -CmdBasePath $sublPath -CmdFile 'sublime_text.exe' -PrettyName 'sublime'

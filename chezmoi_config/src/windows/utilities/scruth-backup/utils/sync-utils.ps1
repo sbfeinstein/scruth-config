@@ -10,7 +10,7 @@ $CommonParams = @(
     'resources\source_devices\$SourceComputer\$FilterFile'
 )
 
-Write-Host "rclone command is $rcloneExec"
+Write-Output "rclone command is $rcloneExec"
 
 function Sync-Dir {
 
@@ -30,9 +30,9 @@ function Sync-Dir {
     $rcloneExec = $Config['rclone_exec_path']
     $expandedParams = $CommonParams | ForEach-Object { $ExecutionContext.InvokeCommand.ExpandString("$_") }
   
-    Write-Host ("-" * 50)
-    Write-Host "Syncing $SourceComputer, $SourceDrive drive using $FilterFile"
-    Write-Host "Rclone Parameters:`n  $expandedParams`n"
+    Write-Output ("-" * 50)
+    Write-Output "Syncing $SourceComputer, $SourceDrive drive using $FilterFile"
+    Write-Output "Rclone Parameters:`n  $expandedParams`n"
   
     & $rcloneExec sync `
         $expandedParams `
@@ -59,9 +59,9 @@ function Confirm-Synced-Dir {
     $rcloneExec = $Config['rclone_exec_path']
     $expandedParams = $CommonParams | ForEach-Object { $ExecutionContext.InvokeCommand.ExpandString("$_") }
   
-    Write-Host ("-" * 50)
-    Write-Host "Validating $SourceComputer, $SourceDrive drive using $FilterFile"
-    Write-Host "Rclone Parameters:`n  $expandedParams`n"
+    Write-Output ("-" * 50)
+    Write-Output "Validating $SourceComputer, $SourceDrive drive using $FilterFile"
+    Write-Output "Rclone Parameters:`n  $expandedParams`n"
   
     $out = & $rcloneExec check `
         $expandedParams `

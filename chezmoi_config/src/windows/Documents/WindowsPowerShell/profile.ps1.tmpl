@@ -32,14 +32,22 @@ function st  { subl @args }
 
 function Install-WinGetDefault { winget import -i {{ joinPath .chezmoi.homeDir ".scruth_default_winget.json" }} @args }
 
-function Install-WinGetMinimal { winget import -i {{ joinPath .chezmoi.homeDir ".scruth_minimal_winget.json" }} @args }
-
 # Alias helpers
 function git_current_branch {
     git rev-parse --abbrev-ref HEAD
 }
 
 # Utilities
+
+function Find-InstallLocation {
+    param(
+        [string]$Pkg
+    )
+    return winget list --details -e $Pkg |
+            Select-String 'Installed Location:' |
+            ForEach-Object { $_.ToString().Split(':', 2)[1].Trim() }
+}
+
 function Get-MakeMKVBetaKey {
     $url = "https://forum.makemkv.com/forum/viewtopic.php?f=5&t=1053"
     $response = Invoke-WebRequest -Uri $url -UseBasicParsing

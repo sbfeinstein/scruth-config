@@ -1,13 +1,26 @@
-{{- if eq .chezmoi.os "darwin" }}
-sourceDir = {{ joinPath .chezmoi.sourceDir "/src/macos" | quote }}
-{{- else if eq .chezmoi.os "windows" }}
-sourceDir = {{ joinPath .chezmoi.sourceDir "/src/windows" | quote }}
-{{- else }}
-{{- warnf "Aborting chezmoi init because OS is not supported: '%s'" .chezmoi.os }}
-{{- exit 1 }}
-{{- end }}
+{{/* boolean feature tags */}}
+{{- $devbox := false -}}{{/* true to include dev-related tools and config */}}
+
+{{/* Set flags */}}
+{{- if eq .chezmoi.hostname "FAMILYFUN" "RARSTEEN" -}}
+{{-   $devbox := true -}}
+{{- end -}}
+
+{{/* Use different source directory based on OS */}}
+{{- $sourceDir := .chezmoi.sourceDir -}}
+{{- if eq .chezmoi.os "darwin" -}}
+{{-   $sourceDir = (joinPath .chezmoi.sourceDir "/src/macos" | quote) -}}
+{{- else if eq .chezmoi.os "windows" -}}
+{{-   $sourceDir = (joinPath .chezmoi.sourceDir "/src/windows" | quote) -}}
+{{- else -}}
+{{-   warnf "Aborting chezmoi init because OS is not supported: '%s'" .chezmoi.os -}}
+{{-   exit 1 -}}
+{{- end -}}
+{{ $baseSourceDir := (joinPath .chezmoi.sourceDir | quote) -}}
+
+sourceDir = {{ $sourceDir }}
 
 [data]
-baseSourceDir = {{ joinPath .chezmoi.sourceDir | quote }}
-profile = "dev"
-gitSigningKey = "id_ed25519_github_windows"
+    baseSourceDir = {{ $baseSourceDir }}
+    devbox = {{ $devbox }}
+    gitSigningKey = "id_ed25519_github_windows"
