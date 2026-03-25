@@ -92,7 +92,7 @@ function Invoke-Backup-Device {
     $sourceComputer = $Config['name']
     $job = [BackupJob]::new((Get-Date), $null, @())
 
-    Write-Output "$(Get-TimeStampString) Starting synchronization of $sourceComputer"
+    Write-Host "$(Get-TimeStampString) Starting synchronization of $sourceComputer"
     foreach ($task in $Config['backup_tasks']) {
         $sourceDrive = $task['SourceDrive']
         $filterFile = $task['FilterFile']
@@ -100,7 +100,7 @@ function Invoke-Backup-Device {
         $task = Invoke-Backup-Task -Config $Config -SourceComputer $sourceComputer -SourceDrive $sourceDrive -FilterFile $filterFile
         $job.tasks += $task
     }
-    Write-Output "$(Get-TimeStampString) Finished synchronization of $sourceComputer"
+    Write-Host "$(Get-TimeStampString) Finished synchronization of $sourceComputer"
 
     $job.EndTimestamp = (Get-Date)
     return $job
@@ -130,9 +130,9 @@ function Invoke-Backup-Task {
     foreach ($syncOutputJsonString in $syncOutputMultiJsonString) {
         $syncOutputObj = $syncOutputJsonString | ConvertFrom-Json
         $task.SyncOutput += $syncOutputObj
-        Write-Output "level: $($syncOutputObj.level)"
-        Write-Output "message:`n$($syncOutputObj.msg.Trim())"
-        Write-Output "stats: $($syncOutputObj.stats | Format-List | Out-String)"
+        Write-Host "level: $($syncOutputObj.level)"
+        Write-Host "message:`n$($syncOutputObj.msg.Trim())"
+        Write-Host "stats: $($syncOutputObj.stats | Format-List | Out-String)"
     }
 
     $confirmOutputMultiJsonString = Confirm-Synced-Dir -Config $Config -SourceComputer $SourceComputer -SourceDrive $SourceDrive -FilterFile $FilterFile
@@ -141,9 +141,9 @@ function Invoke-Backup-Task {
     foreach ($confirmOutputJsonString in $confirmOutputJsonStrings) {
         $confirmOutputObj = $confirmOutputJsonString | ConvertFrom-Json
         $task.ConfirmOutput += $confirmOutputObj
-        Write-Output "level: $($confirmOutputObj.level)"
-        Write-Output "message:`n$($confirmOutputObj.msg.Trim())"
-        Write-Output "stats: $($confirmOutputObj.stats | Format-List | Out-String)"
+        Write-Host "level: $($confirmOutputObj.level)"
+        Write-Host "message:`n$($confirmOutputObj.msg.Trim())"
+        Write-Host "stats: $($confirmOutputObj.stats | Format-List | Out-String)"
     }
 
     $task.EndTimestamp = (Get-Date)

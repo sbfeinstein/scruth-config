@@ -8,13 +8,13 @@ function Ping-Destination {
     $destinationPath = $Config['destination_root_path']
     $destinationMAC = $Config['destination_mac_address']
 
-    Write-Output "Checking if backup destination is reachable"
+    Write-Host "Checking if backup destination is reachable"
     $isAwake = Test-NetworkPath -path $destinationPath
     $attempts = 1
     $maxAttempts = 3
 
     while (!$isAwake -and $attempts -le $maxAttempts) {
-        Write-Output "Backup destination not reachable (attempt $attempts), sending magic packet and waiting 5 seconds"
+        Write-Host "Backup destination not reachable (attempt $attempts), sending magic packet and waiting 5 seconds"
         Send-MagicPacket -MacAddress $destinationMAC
         Start-Sleep -Seconds 5
         $attempts++
@@ -22,10 +22,10 @@ function Ping-Destination {
     }
 
     if ($isAwake) {
-        Write-Output "Backup destination is reachable"
+        Write-Host "Backup destination is reachable"
         return $true
     } else {
-        Write-Output "Backup destination is not reachable"
+        Write-Host "Backup destination is not reachable"
         return $false
     }    
 }

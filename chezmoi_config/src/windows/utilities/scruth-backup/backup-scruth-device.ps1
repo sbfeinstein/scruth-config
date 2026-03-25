@@ -11,13 +11,14 @@ param(
   [Switch]$SampleData 
 )
 
+. $PWD\config\config-init.ps1
+$config = Initialize-Config($ComputerParam)
+Write-Host "Initialized config:"
+Write-Host-HashTable -HashTable $config
 
 . $PWD\utils\email-utils.ps1
-. $PWD\config\config-init.ps1
 . $PWD\utils\wake-utils.ps1
 . $PWD\utils\job-utils.ps1
-
-$config = Initialize-Config($ComputerParam)
 
 if ($EmailTestOnly) {
   if ($SampleData) {
