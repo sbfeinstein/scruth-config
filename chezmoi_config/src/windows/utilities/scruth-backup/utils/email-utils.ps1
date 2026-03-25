@@ -8,7 +8,7 @@ function Send-JobReportEmail {
         [hashtable]$Config,
 
         [Parameter(Mandatory)]
-        [BackupJob]$BackupJob
+        [object]$BackupJob  # Changed from [BackupJob]
     )
 
     $body = Get-BackupEmailBody -Config $Config -BackupJob $BackupJob
@@ -28,7 +28,7 @@ function Get-BackupEmailBody {
         [hashtable]$Config,
 
         [Parameter(Mandatory)]
-        [BackupJob]$BackupJob
+        [object]$BackupJob  # Changed from [BackupJob]
     )
     
     $sourceName = $($Config['name'])
