@@ -15,12 +15,11 @@ $taskXmlDef = {{ joinPath .chezmoi.homeDir "utilities/scruth-backup/backup-scrut
 $pwd = op read "op://kmhwtn4fzf2vhyq3luti556edu/Microsoft - Scott/password"
 
 # Must use a ScriptBlock to evaluate the vars using the current process
-$action = [ScriptBlock]::Create("
+$sb = [ScriptBlock]::Create("
     schtasks.exe /create /xml '$taskXmlDef' /tn '$taskFullName' /f /rp '$pwd' /ru 'scott'
-    sleep(10)
 ")
 $params = @{
     DisplayLabel = "creating $taskFullName in Task Scheduler"
-    Command = $action
+    ScriptBlock = $sb
 }
 Invoke-ElevatedCommand @params

@@ -26,12 +26,12 @@ function Ensure-SystemPathEntry {
 
         # Must use a ScriptBlock to evaluate the vars using the current process
         $newPathValue = "$oldPath;$binFolder"
-        $action = [ScriptBlock]::Create("
+        $sb = [ScriptBlock]::Create("
             [Environment]::SetEnvironmentVariable('PATH', '$newPathValue', 'Machine')
         ")
         $params = @{
             DisplayLabel = "ensuring system path element for $PrettyName"
-            Command = $action
+            ScriptBlock = $sb
         }
         Invoke-ElevatedCommand @params
     } else {
@@ -86,57 +86,41 @@ function Invoke-ElevatedCommand {
         [string]$DisplayLabel,
 
         [Parameter(Mandatory)]
-        [Alias('Script', 'Command')]
-        $Cmd,
+        [ScriptBlock]$ScriptBlock,
 
         [switch]$Quiet
     )
 
     #
-    # Normalize the command into a single string
+    # Create a unique temporary log file that the *non‑elevated* caller can read.
     #
-    if ($Cmd -is [scriptblock]) {
-        $cmdString = $Cmd.ToString()
-    } elseif ($Cmd -is [string]) {
-        $cmdString = $Cmd
-    } else {
-        throw "Unsupported command type: $( $Cmd.GetType().FullName )"
-    }
-
-    #
-    # Create a readable log file owned by the unelevated user
-    #
-    $epochMs = [int64]([DateTimeOffset]::Now.ToUnixTimeMilliseconds())
-    $log = Join-Path $env:TEMP "scruth-config_elevated_$epochMs.log"
-    New-Item -Path $log -ItemType File -Force | Out-Null
-    Clear-Content $log
+    $epoch = [DateTimeOffset]::Now.ToUnixTimeMilliseconds()
+    $logPath = Join-Path $env:TEMP "InvokeElevated_$epoch.log"
+    New-Item -Path $logPath -ItemType File -Force | Out-Null
+    Clear-Content -Path $logPath
 
     if (-not $Quiet) {
-        Write-Output "$ICON_INFO  Executing elevated script for $DisplayLabel, logging to $log..."
+        Write-Output "$ICON_INFO  Executing elevated script for $DisplayLabel, logging to $logPath"
     }
 
     #
-    # Build the elevated command string
+    # Wrap the command so its output (including errors) is both displayed in the new window and logged
     #
-    $escaped = $cmdString.Replace('"', '\"')
-    $full = @"
-& { $escaped } | Tee-Object -FilePath '$log'
-"@
+    $commandText = "& { " + $ScriptBlock.ToString().Replace('"', '\"') + " } 2>&1 | Tee-Object -FilePath `"$logPath`""
 
-    #
-    # Launch elevated PowerShell
-    #
-    $proc = Start-Process powershell.exe `
+    # Run elevated and wait to finish
+    $proc = Start-Process -FilePath "powershell.exe" `
         -ArgumentList @(
-        "-NoProfile"
-        "-ExecutionPolicy Bypass"
-        "-Command $full"
-    ) `
+            "-NoProfile"
+            "-ExecutionPolicy", "Bypass"
+            "-Command", $commandText
+        ) `
         -Verb RunAs `
         -PassThru `
         -Wait
 
-    Get-Content -Path $log
+    # Display the logged output in the current process
+    Get-Content -Path $logPath
     $exit = $proc.ExitCode
 
     if (-not $Quiet) {
@@ -159,5 +143,5 @@ function Test-IsAdmin {
 }
 
 function Write-HorizontalRule {
-    Write-Output ($UNICODE_EMDASH * $Host.UI.RawUI.WindowSize.Width) -ForegroundColor DarkCyan
+    Write-Host ($UNICODE_EMDASH * $Host.UI.RawUI.WindowSize.Width) -ForegroundColor DarkCyan
 }

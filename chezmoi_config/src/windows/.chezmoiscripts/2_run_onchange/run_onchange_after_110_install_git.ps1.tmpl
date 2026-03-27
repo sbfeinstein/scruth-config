@@ -1,0 +1,22 @@
+{{ template "common" . }}
+
+# Git (machine scope)
+$cmd = 'git'
+
+if (Test-CommandExists 'git') {
+    Write-Host "$ICON_INFO  git is already installed"
+    return
+}
+
+$sb = [ScriptBlock]::Create(@"
+    function Install-WingetPackage { ${function:Install-WingetPackage} }
+    function Test-CommandExists { ${function:Test-CommandExists} }
+
+    `$ok=Install-WingetPackage -CheckCmd 'git' -WingetId 'Git.Git' -PrettyName 'Git' -OtherParameters '-e --source winget --scope machine'
+"@)
+
+$params = @{
+    DisplayLabel = 'installing git with machine scopes'
+    ScriptBlock = $sb
+}
+Invoke-ElevatedCommand @params

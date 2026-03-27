@@ -1,4 +1,4 @@
-{{ template "common" . }}
+{{ template "emoji_constants" . }}
 
 # If any of these other files change, we want to install via WinGet
 # {{- include "dot_scruth_default_winget.json.tmpl" | sha256sum }}
@@ -8,12 +8,3 @@ $wingetJson = '{{ joinPath .chezmoi.homeDir ".scruth_default_winget.json" }}'
 Write-Output "$ICON_INFO  Installing WinGet: $wingetJson"
 winget import -i $wingetJson
 Write-Output "$ICON_CHECK  Done importing default packages using WinGet"
-
-# Git (machine scope)
-$params = @{
-    DisplayLabel = 'installing git with machine scope'
-    Command = {
-        Install-WingetPackage -CheckCmd 'git' -WingetId 'Git.Git' -PrettyName 'Git' -OtherParameters '-e --source winget --scope machine'
-    }
-}
-Invoke-ElevatedCommand @params

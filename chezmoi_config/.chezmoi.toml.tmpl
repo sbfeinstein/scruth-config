@@ -1,3 +1,9 @@
+{{/* hostname check */}}
+{{- if not (eq .chezmoi.hostname "FAMILYFUNN" "RARSTEEN" "CRAFTINGISSEXY") -}}
+{{-   warnf "Aborting chezmoi init because hostname '%s' is not a ScruthSystem" .chezmoi.hostname -}}
+{{-   exit 1 -}}
+{{- end -}}
+
 {{/* boolean feature tags */}}
 {{- $devbox := false -}}{{/* true to include dev-related tools and config */}}
 
