@@ -27,7 +27,7 @@ if (-not $ok) {
     exit 1
 }
 $1pwdPath = Find-InstallLocation $1pwdPackage
-Ensure-SystemPathEntry -CmdBasePath $1pwdPath -CmdFile 'op.exe' -PrettyName '1Password CLI (op)'
+Add-SystemPathEntry -CmdBasePath $1pwdPath -CmdFile 'op.exe' -PrettyName '1Password CLI (op)'
 
 # chezmoi installation
 $chezmoiPackage = 'twpayne.chezmoi'
@@ -37,7 +37,7 @@ if (-not $ok) {
     exit 1
 }
 $chezmoiPath = Find-InstallLocation $chezmoiPackage
-Ensure-SystemPathEntry -CmdBasePath $chezmoiPath -CmdFile 'chezmoi.exe' -PrettyName 'chezmoi'
+Add-SystemPathEntry -CmdBasePath $chezmoiPath -CmdFile 'chezmoi.exe' -PrettyName 'chezmoi'
 
 ###############################################################################
 # Init and apply chezmoi

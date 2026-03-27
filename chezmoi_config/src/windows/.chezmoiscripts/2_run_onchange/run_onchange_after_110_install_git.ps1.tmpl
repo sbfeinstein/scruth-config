@@ -9,14 +9,11 @@ if (Test-CommandExists 'git') {
 }
 
 $sb = [ScriptBlock]::Create(@"
-    function Install-WingetPackage { ${function:Install-WingetPackage} }
-    function Test-CommandExists { ${function:Test-CommandExists} }
-
-    `$ok=Install-WingetPackage -CheckCmd 'git' -WingetId 'Git.Git' -PrettyName 'Git' -OtherParameters '-e --source winget --scope machine'
+    . {{ joinPath .chezmoi.sourceDir "dot_scruth-config/common.ps1" | quote }}
+    Install-WingetPackage -CheckCmd 'git' -WingetId 'Git.Git' -PrettyName 'Git' -OtherParameters '-e --source winget --scope machine'
 "@)
-
 $params = @{
-    DisplayLabel = 'installing git with machine scopes'
+    DisplayLabel = 'installing git with machine scope'
     ScriptBlock = $sb
 }
 Invoke-ElevatedCommand @params

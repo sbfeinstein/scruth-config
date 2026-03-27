@@ -34,7 +34,7 @@ $UNICODE_EMDASH = [char]::ConvertFromUtf32(0x2014)
 # Helpful functions
 ###############################################################################
 
-function Ensure-SystemPathEntry {
+function Add-SystemPathEntry {
     param(
         [string]$CmdBasePath,
         [string]$CmdFile,
@@ -55,8 +55,9 @@ function Ensure-SystemPathEntry {
 
     if ($oldPath -notlike "*$binFolder*") {
         # Write old path to a file for safety's sake
-        $pathHistoryFile = "$HOME\.scruth-config\system_path_history.log"
-        Add-Content -Path $pathHistoryFile -Value "$(Get-Date)`n$oldPath`n`n"
+        $systemPathHistoryFile = "$HOME\.scruth-config\system_path_history.log"
+        New-Item -Path "$HOME\.scruth-config" -ItemType Directory -Force
+        Add-Content -Path $systemPathHistoryFile -Value "$(Get-Date)`n$oldPath`n`n"
 
         # Must use a ScriptBlock to evaluate the vars using the current process
         $newPathValue = "$oldPath;$binFolder"
@@ -68,6 +69,9 @@ function Ensure-SystemPathEntry {
             ScriptBlock = $sb
         }
         Invoke-ElevatedCommand @params
+
+        # Update path in this process
+        $env:Path = [System.Environment]::ExpandEnvironmentVariables(([System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")))
     } else {
         Write-Verbose "$ICON_INFO  Path for $PrettyName is already in System PATH."
     }
@@ -101,8 +105,9 @@ function Install-WingetPackage {
         return $false
     }
 
-    Write-Output "$ICON_WRENCH  Installing $PrettyName via winget (id: $WingetId) ..."
-    & winget install --accept-package-agreements --accept-source-agreements --id $WingetId $OtherParameters
+    Write-Host "$ICON_WRENCH  Installing $PrettyName via winget (id: $WingetId) ..."
+    $fullCommand = "winget install --accept-package-agreements --accept-source-agreements --id $WingetId $OtherParameters"
+    Invoke-Expression "$fullCommand 2>&1" | Out-Host
     if ($LASTEXITCODE -eq 0) {
         Write-Host "$ICON_CHECK  $PrettyName installed"
         return $true

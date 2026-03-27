@@ -5,12 +5,12 @@
 
 # git
 $gitPath = Find-InstallLocation 'Git.Git'
-Ensure-SystemPathEntry -CmdBasePath $gitPath -CmdFile 'git.exe' -PrettyName 'git'
+Add-SystemPathEntry -CmdBasePath $gitPath -CmdFile 'git.exe' -PrettyName 'git'
 
 # rclone
 $rclonePath = Find-InstallLocation 'Rclone.Rclone'
-Ensure-SystemPathEntry -CmdBasePath $rclonePath  -CmdFile 'rclone.exe' -PrettyName 'rclone'
+Add-SystemPathEntry -CmdBasePath $rclonePath  -CmdFile 'rclone.exe' -PrettyName 'rclone'
 
 # sublime
 $sublPath = Find-InstallLocation 'SublimeHQ.SublimeText.4'
-Ensure-SystemPathEntry -CmdBasePath $sublPath -CmdFile 'sublime_text.exe' -PrettyName 'sublime'
+Add-SystemPathEntry -CmdBasePath $sublPath -CmdFile 'sublime_text.exe' -PrettyName 'sublime'
