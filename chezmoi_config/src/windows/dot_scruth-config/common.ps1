@@ -53,28 +53,30 @@ function Add-SystemPathEntry {
 
     $oldPath = [Environment]::GetEnvironmentVariable("PATH", "Machine")
 
-    if ($oldPath -notlike "*$binFolder*") {
-        # Write old path to a file for safety's sake
-        $systemPathHistoryFile = "$HOME\.scruth-config\system_path_history.log"
-        New-Item -Path "$HOME\.scruth-config" -ItemType Directory -Force
-        Add-Content -Path $systemPathHistoryFile -Value "$(Get-Date)`n$oldPath`n`n"
-
-        # Must use a ScriptBlock to evaluate the vars using the current process
-        $newPathValue = "$oldPath;$binFolder"
-        $sb = [ScriptBlock]::Create("
-            [Environment]::SetEnvironmentVariable('PATH', '$newPathValue', 'Machine')
-        ")
-        $params = @{
-            DisplayLabel = "ensuring system path element for $PrettyName"
-            ScriptBlock = $sb
-        }
-        Invoke-ElevatedCommand @params
-
-        # Update path in this process
-        $env:Path = [System.Environment]::ExpandEnvironmentVariables(([System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")))
-    } else {
+    if ($oldPath -like "*$binFolder*") {
         Write-Verbose "$ICON_INFO  Path for $PrettyName is already in System PATH."
+        return
     }
+
+    # Write old path to a file for safety's sake
+    $systemPathHistoryFile = "$HOME\.scruth-config\system_path_history.log"
+    New-Item -Path "$HOME\.scruth-config" -ItemType Directory -Force | Out-Null
+    Add-Content -Path $systemPathHistoryFile -Value "$(Get-Date)`n$oldPath`n`n"
+
+    # Need an elevated process to update the system path
+    $newPathValue = "$oldPath;$binFolder"
+    $sb = [ScriptBlock]::Create("
+        [Environment]::SetEnvironmentVariable('PATH', '$newPathValue', 'Machine')
+    ")
+    $params = @{
+        DisplayLabel = "ensuring system path element for $PrettyName"
+        ScriptBlock = $sb
+    }
+    Invoke-ElevatedCommand @params
+
+    # Update system path in this process
+    $env:Path = [System.Environment]::ExpandEnvironmentVariables(([System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")))
+    return
 }
 
 function Find-InstallLocation {
@@ -106,7 +108,7 @@ function Install-WingetPackage {
     }
 
     Write-Host "$ICON_WRENCH  Installing $PrettyName via winget (id: $WingetId) ..."
-    $fullCommand = "winget install --accept-package-agreements --accept-source-agreements --id $WingetId $OtherParameters"
+    $fullCommand = "winget install --accept-package-agreements --accept-source-agreements --no-progress --id $WingetId $OtherParameters"
     Invoke-Expression "$fullCommand 2>&1" | Out-Host
     if ($LASTEXITCODE -eq 0) {
         Write-Host "$ICON_CHECK  $PrettyName installed"
