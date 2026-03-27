@@ -1,4 +1,4 @@
-{{ template "common" . }}
+. {{ joinPath .chezmoi.sourceDir "dot_scruth-config/common.ps1" | quote }}
 
 # System Path updates get their own file since we always want to check for and
 # "repair" if necessary paths are missing.

@@ -1,4 +1,4 @@
-{{ template "emoji_constants" . }}
+. {{ joinPath .chezmoi.sourceDir "dot_scruth-config/common.ps1" | quote }}
 
 # If any of these other files change, we want to install via WinGet
 # {{- include "dot_scruth_default_winget.json.tmpl" | sha256sum }}

@@ -1,3 +1,6 @@
-This is a place where scruth-config can generate and store artifacts such as audit logs.
+# scruth-config
+The systems management software for Scruth.
 
-This is convenient if we want to back up those generated files.
+This directory contains common code and generated artifacts from the project.
+
+See [scruth-config](https://github.com/sbfeinstein/scruth-config).

@@ -1,4 +1,4 @@
-{{ template "emoji_constants" . }}
+. {{ joinPath .chezmoi.sourceDir "dot_scruth-config/common.ps1" | quote }}
 
 # Force this onchange script to re-run if key is modified: {{ include (joinPath .chezmoi.homeDir ".ssh" .gitSigningKey) | sha256sum }}
 

@@ -1,4 +1,38 @@
-{{ template "emoji_constants" . }}
+###############################################################################
+# scruth-config common.ps1
+# Helpful constants and functions that are used for scruth-config's setup
+# and other scripts.
+# May also be useful as general PowerShell profile additions.  Can include
+# in PowerShell profile files (including automatic management via scruth-confg)
+# by sourcing.
+###############################################################################
+
+###############################################################################
+# Emoji constants (PowerShell 5.1+ compatible)
+#
+# https://www.w3schools.com/charsets/ref_emoji.asp
+#
+# You can get the write hex code to use for a given single-character symbol via:
+# "0x{0:X4}" -f [int][char]'•' # outputs 0x2022
+# "0x{0:X4}" -f [int][char]'•' # outputs 0x2022
+###############################################################################
+
+$ICON_INFO     = [char]::ConvertFromUtf32(0x2139) + [char]::ConvertFromUtf32(0xFE0F)
+$ICON_CROSS    = [char]::ConvertFromUtf32(0x274C)
+$ICON_CHECK    = [char]::ConvertFromUtf32(0x2705)
+$ICON_MAGE     = [char]::ConvertFromUtf32(0x1F9D9)
+$ICON_ROCKET   = [char]::ConvertFromUtf32(0x1F680)
+$ICON_GLASSES  = [char]::ConvertFromUtf32(0x1F60E)
+$ICON_TM       = [char]::ConvertFromUtf32(0x2122)
+$ICON_WRENCH   = [char]::ConvertFromUtf32(0x1F527)
+$ICON_WARNING  = [char]::ConvertFromUtf32(0x26A0) + [char]::ConvertFromUtf32(0xFE0F)
+
+$UNICODE_BULLET = [char]::ConvertFromUtf32(0x2022)
+$UNICODE_EMDASH = [char]::ConvertFromUtf32(0x2014)
+
+###############################################################################
+# Helpful functions
+###############################################################################
 
 function Ensure-SystemPathEntry {
     param(
@@ -21,7 +55,7 @@ function Ensure-SystemPathEntry {
 
     if ($oldPath -notlike "*$binFolder*") {
         # Write old path to a file for safety's sake
-        $pathHistoryFile = {{ joinPath .chezmoi.homeDir ".scruth-config/system_path_history.log" | quote }}
+        $pathHistoryFile = "$HOME\.scruth-config\system_path_history.log"
         Add-Content -Path $pathHistoryFile -Value "$(Get-Date)`n$oldPath`n`n"
 
         # Must use a ScriptBlock to evaluate the vars using the current process
@@ -57,7 +91,7 @@ function Install-WingetPackage {
     )
 
     if (Test-CommandExists $CheckCmd) {
-        Write-Output "$ICON_INFO  $PrettyName already installed"
+        Write-Host "$ICON_INFO  $PrettyName already installed"
         return $true
     }
 
@@ -70,7 +104,7 @@ function Install-WingetPackage {
     Write-Output "$ICON_WRENCH  Installing $PrettyName via winget (id: $WingetId) ..."
     & winget install --accept-package-agreements --accept-source-agreements --id $WingetId $OtherParameters
     if ($LASTEXITCODE -eq 0) {
-        Write-Output "$ICON_CHECK  $PrettyName installed"
+        Write-Host "$ICON_CHECK  $PrettyName installed"
         return $true
     }
     else {

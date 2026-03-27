@@ -1,4 +1,4 @@
-{{ template "common" . }}
+. {{ joinPath .chezmoi.sourceDir "dot_scruth-config/common.ps1" | quote }}
 
 {{/* hostname check */}}
 {{- if not (eq .chezmoi.hostname "FAMILYFUN" "RARSTEEN" "CRAFTINGISSEXY") -}}

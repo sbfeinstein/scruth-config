@@ -1,8 +1,15 @@
-# Common functionality across all versions of PowerShell
+###############################################################################
+# Default PowerShell Profile
+# https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_profiles?view=powershell-5.1
+###############################################################################
 
 # Remove collisions with existing PowerShell aliases that I don't want to deal with
 Remove-Item Alias:gc -Force
 Remove-Item Alias:gp -Force
+
+# scruth-config
+# Generally load its common PowerShell helpers and constants 'cause why not
+. {{ joinPath .chezmoi.sourceDir "dot_scruth-config/common.ps1" | quote }}
 
 # Aliases
 function chez { chezmoi apply }
@@ -38,15 +45,6 @@ function git_current_branch {
 }
 
 # Utilities
-
-function Find-InstallLocation {
-    param(
-        [string]$Pkg
-    )
-    return winget list --details -e $Pkg |
-            Select-String 'Installed Location:' |
-            ForEach-Object { $_.ToString().Split(':', 2)[1].Trim() }
-}
 
 function Get-MakeMKVBetaKey {
     $url = "https://forum.makemkv.com/forum/viewtopic.php?f=5&t=1053"
