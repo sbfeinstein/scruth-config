@@ -4,7 +4,6 @@
 # {{- include "dot_scruth_default_winget.json.tmpl" | sha256sum }}
 
 # WinGet (JSON manifest, only supports user-scoped)
-$wingetJson = '{{ joinPath .chezmoi.homeDir ".scruth_default_winget.json" }}'
 Write-Output "$ICON_INFO  Installing WinGet: $wingetJson"
-winget import -i $wingetJson
+Install-WinGetDefault
 Write-Output "$ICON_CHECK  Done importing default packages using WinGet"

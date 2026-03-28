@@ -67,12 +67,11 @@ if ($sourcePath -and (Test-Path $sourcePath)) {
 Write-Output "$ICON_INFO  Initializing and applying chezmoi..."
 
 & chezmoi init $RepoToInit --branch $RepoBranch
-& chezmoi init # HACK to avoid "your config needs to be regenerated" message, likely due to changing sourceDir
-
 if ($LASTEXITCODE -ne 0) {
     Write-Warning "$ICON_CROSS  chezmoi init failed (exit code $LASTEXITCODE)"
     exit 1
 }
+& chezmoi init # HACK to avoid "your config needs to be regenerated" message, likely due to changing sourceDir
 
 & chezmoi apply
 if ($LASTEXITCODE -ne 0) {

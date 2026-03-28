@@ -54,7 +54,8 @@ function Add-SystemPathEntry {
     $oldPath = [Environment]::GetEnvironmentVariable("PATH", "Machine")
 
     if ($oldPath -like "*$binFolder*") {
-        Write-Verbose "$ICON_INFO  Path for $PrettyName is already in System PATH."
+        Write-Host "$ICON_INFO  Path for $PrettyName is already in System PATH."
+        $env:Path = Get-CurrentPathEnv
         return
     }
 
@@ -75,7 +76,7 @@ function Add-SystemPathEntry {
     Invoke-ElevatedCommand @params
 
     # Update system path in this process
-    $env:Path = [System.Environment]::ExpandEnvironmentVariables(([System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")))
+    $env:Path = Get-CurrentPathEnv
     return
 }
 
@@ -86,6 +87,14 @@ function Find-InstallLocation {
     return winget list --details -e $Pkg |
             Select-String 'Installed Location:' |
             ForEach-Object { $_.ToString().Split(':', 2)[1].Trim() }
+}
+
+function Get-CurrentPathEnv {
+    return [System.Environment]::ExpandEnvironmentVariables(([System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")))
+}
+
+function Install-WinGetDefault {
+    & winget import -i "$HOME\.scruth_default_winget.json" @args
 }
 
 function Install-WingetPackage {

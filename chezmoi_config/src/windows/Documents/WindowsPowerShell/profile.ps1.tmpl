@@ -37,8 +37,6 @@ function groh {
 
 function st  { subl @args }
 
-function Install-WinGetDefault { winget import -i {{ joinPath .chezmoi.homeDir ".scruth_default_winget.json" }} @args }
-
 # Alias helpers
 function git_current_branch {
     git rev-parse --abbrev-ref HEAD
