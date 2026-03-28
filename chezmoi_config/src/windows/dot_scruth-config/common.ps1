@@ -98,26 +98,23 @@ function Install-WingetPackage {
 
     if (Test-CommandExists $CheckCmd) {
         Write-Host "$ICON_INFO  $PrettyName already installed"
-        return $true
+        return
     }
 
     # Check winget
     if (-not (Test-CommandExists 'winget')) {
         Write-Warning "$ICON_CROSS  winget not found. Please install winget or install $PrettyName manually."
-        return $false
+        exit 1
     }
 
     Write-Host "$ICON_WRENCH  Installing $PrettyName via winget (id: $WingetId) ..."
-    $fullCommand = "winget install --accept-package-agreements --accept-source-agreements --no-progress --id $WingetId $OtherParameters"
+    $fullCommand = "winget install --accept-package-agreements --accept-source-agreements --id $WingetId $OtherParameters"
     Invoke-Expression "$fullCommand 2>&1" | Out-Host
-    if ($LASTEXITCODE -eq 0) {
-        Write-Host "$ICON_CHECK  $PrettyName installed"
-        return $true
-    }
-    else {
+    if ($LASTEXITCODE -ne 0) {
         Write-Warning "$ICON_CROSS  winget failed to install $PrettyName (exit code $LASTEXITCODE)"
-        return $false
+        exit 1
     }
+    Write-Host "$ICON_CHECK  $PrettyName installed"
 }
 
 function Invoke-ElevatedCommand {

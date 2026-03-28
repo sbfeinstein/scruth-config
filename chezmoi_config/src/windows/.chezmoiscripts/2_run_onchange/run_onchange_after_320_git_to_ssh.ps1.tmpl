@@ -1,0 +1,4 @@
+. {{ joinPath .chezmoi.sourceDir "dot_scruth-config/common.ps1" | quote }}
+
+git -C {{ .chezmoi.sourceDir }} remote set-url origin git@github.com:sbfeinstein/scruth-config.git
+Write-Host "$ICON_CHECK  Forced git to SSH for ~/.local/share/chezmoi"

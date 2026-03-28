@@ -21,21 +21,13 @@ Write-HorizontalRule
 
 # 1Password CLI
 $1pwdPackage = 'AgileBits.1Password.CLI'
-$ok = Install-WingetPackage -CheckCmd 'op' -WingetId $1pwdPackage -PrettyName '1Password CLI'
-if (-not $ok) {
-    Write-Warning "$ICON_CROSS  Please install 1Password CLI manually and re-run this script."
-    exit 1
-}
+Install-WingetPackage -CheckCmd 'op' -WingetId $1pwdPackage -PrettyName '1Password CLI'
 $1pwdPath = Find-InstallLocation $1pwdPackage
 Add-SystemPathEntry -CmdBasePath $1pwdPath -CmdFile 'op.exe' -PrettyName '1Password CLI (op)'
 
 # chezmoi installation
 $chezmoiPackage = 'twpayne.chezmoi'
-$ok = Install-WingetPackage -CheckCmd 'chezmoi' -WingetId $chezmoiPackage -PrettyName 'chezmoi'
-if (-not $ok) {
-    Write-Warning "$ICON_CROSS  Please install chezmoi manually and re-run this script."
-    exit 1
-}
+Install-WingetPackage -CheckCmd 'chezmoi' -WingetId $chezmoiPackage -PrettyName 'chezmoi'
 $chezmoiPath = Find-InstallLocation $chezmoiPackage
 Add-SystemPathEntry -CmdBasePath $chezmoiPath -CmdFile 'chezmoi.exe' -PrettyName 'chezmoi'
 
