@@ -1,5 +1,11 @@
 . {{ joinPath .chezmoi.sourceDir "dot_scruth-config/common.ps1" | quote }}
 
+# If any of these other files change, we want to re-check for tasks since they should have been deleted
+# by a previous script
+# {{ include (joinPath .chezmoi.homeDir "utilities/scruth-backup/backup-scruth-task.xml") | sha256sum }}
+# {{ include (joinPath .chezmoi.homeDir "utilities/scruth-backup/backup-scruth-device.ps1") | sha256sum }}
+# {{ include (joinPath .chezmoi.homeDir "utilities/scruth-backup/backup-scruth-device-wrapper.ps1") | sha256sum }}
+
 $taskFolder = "\Scott tasks\"
 $taskName = "scruth-backup"
 $taskFullName = $taskFolder + $taskName

@@ -94,7 +94,7 @@ function Get-CurrentPathEnv {
 }
 
 function Install-WinGetDefault {
-    & winget import -i "$HOME\.scruth_default_winget.json" @args
+    & winget import -i "$HOME\.scruth-config\.scruth_default_winget.json" @args
 }
 
 function Install-WingetPackage {
@@ -189,6 +189,26 @@ function Test-IsAdmin {
     return $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 
-function Write-HorizontalRule {
+function Write-HostHorizontalRule {
     Write-Host ($UNICODE_EMDASH * $Host.UI.RawUI.WindowSize.Width) -ForegroundColor DarkCyan
+}
+
+function Write-HostInfo {
+    param([string]$str)
+    Write-Host "$ICON_INFO  $str"
+}
+
+function Write-HostCaution {
+    param([string]$str)
+    Write-Host "$ICON_INFO  $str" -ForegroundColor Yellow
+}
+
+function Write-WarningCaution {
+    param([string]$str)
+    Write-Warning "$ICON_CROSS  $str"
+}
+
+function Write-HostSuccess {
+    param([string]$str)
+    Write-Host "$ICON_CHECK  $str" -ForegroundColor Green
 }

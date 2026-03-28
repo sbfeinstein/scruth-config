@@ -51,3 +51,25 @@ function Get-MakeMKVBetaKey {
         Write-Output $Matches[1].Trim()
     }
 }
+
+function Reset-ChezmoiConfig {
+    [CmdletBinding(ConfirmImpact='High')]
+    param()
+    process {
+        $configPath = chezmoi execute-template '{{ .chezmoi.configFile }}'
+
+        if ($null -ne $configPath -and (Test-Path $configPath)) {
+            Write-Host "$ICON_INFO  Removing existing config at: $configPath" -ForegroundColor Yellow
+            Remove-Item $configPath -Force
+        } else {
+            Write-Warning "$ICON_CROSS  No existing chezmoi config file was found to delete."
+        }
+
+        # Re-run init to generate a fresh config from your template
+        # Use --prompt if you want to re-trigger interactive questions
+        Write-Host "$ICON_INFO  Re-initializing chezmoi..."
+        & chezmoi init
+        & chezmoi init # hack due to sourceDir override, want to prevent chezmoi warnings about needing to re-gen config
+        Write-Host "$ICON_CHECK  Done re-initializing chezmoi" -ForegroundColor Green
+    }
+}

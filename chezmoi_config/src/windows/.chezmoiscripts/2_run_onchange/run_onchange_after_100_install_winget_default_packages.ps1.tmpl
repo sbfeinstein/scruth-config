@@ -1,7 +1,7 @@
 . {{ joinPath .chezmoi.sourceDir "dot_scruth-config/common.ps1" | quote }}
 
 # If any of these other files change, we want to install via WinGet
-# {{- include "dot_scruth_default_winget.json.tmpl" | sha256sum }}
+# {{- include (joinPath .chezmoi.sourceDir "dot_scruth-config/dot_scruth_default_winget.json.tmpl") | sha256sum }}
 
 # WinGet (JSON manifest, only supports user-scoped)
 Write-Output "$ICON_INFO  Installing WinGet: $wingetJson"

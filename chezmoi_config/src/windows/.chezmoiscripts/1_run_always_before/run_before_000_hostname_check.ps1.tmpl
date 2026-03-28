@@ -5,7 +5,7 @@
 Write-Warning "$ICON_CROSS  This system ({{ .chezmoi.hostname -}}) is not an allowed ScruthSystem$ICON_TM, aborting setup"
 exit 1
 {{- else -}}
-Write-HorizontalRule
+Write-HostHorizontalRule
 Write-Output "$ICON_ROCKET  Setting up ScruthSystem$ICON_TM {{ .chezmoi.hostname -}}, a Windows computer"
-Write-HorizontalRule
+Write-HostHorizontalRule
 {{- end -}}

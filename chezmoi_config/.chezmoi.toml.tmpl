@@ -1,32 +1,44 @@
-{{/* hostname check */}}
-{{- if not (eq .chezmoi.hostname "FAMILYFUN" "RARSTEEN" "CRAFTINGISSEXY") -}}
-{{-   warnf "Aborting chezmoi init because hostname '%s' is not a ScruthSystem" .chezmoi.hostname -}}
-{{-   exit 1 -}}
-{{- end -}}
-
-{{/* boolean feature tags */}}
-{{- $devbox := false -}}{{/* true to include dev-related tools and config */}}
-
-{{/* Set flags */}}
-{{- if eq .chezmoi.hostname "FAMILYFUN" "RARSTEEN" -}}
-{{-   $devbox := true -}}
-{{- end -}}
-
-{{/* Use different source directory based on OS */}}
-{{- $sourceDir := .chezmoi.sourceDir -}}
-{{- if eq .chezmoi.os "darwin" -}}
-{{-   $sourceDir = (joinPath .chezmoi.sourceDir "/src/macos" | quote) -}}
-{{- else if eq .chezmoi.os "windows" -}}
-{{-   $sourceDir = (joinPath .chezmoi.sourceDir "/src/windows" | quote) -}}
-{{- else -}}
-{{-   warnf "Aborting chezmoi init because OS is not supported: '%s'" .chezmoi.os -}}
-{{-   exit 1 -}}
-{{- end -}}
-{{ $baseSourceDir := (joinPath .chezmoi.sourceDir | quote) -}}
-
+{{- /*********************************************************************/ -}}
+{{- /* Hostname check                                                    */ -}}
+{{- /*********************************************************************/ -}}
+{{- if not (eq .chezmoi.hostname "FAMILYFUN" "RARSTEEN" "CRAFTINGISSEXY")   -}}
+{{-   warnf "Aborting. Hostname '%s' not a ScruthSystem" .chezmoi.hostname  -}}
+{{-   exit 1                                                                -}}
+{{- end                                                                     -}}
+{{- /*********************************************************************/ -}}
+{{- /* Flags                                                             */ -}}
+{{- /*********************************************************************/ -}}
+{{- /* devbox - "true" to install dev-related tools and configuration    */ -}}
+{{- $devbox := false                                                        -}}
+{{- if eq .chezmoi.hostname "FAMILYFUN" "RARSTEEN"                          -}}
+{{-   $devbox = true                                                        -}}
+{{- end                                                                     -}}
+{{- /* scruthBackupStartBoundary - scruth-backup time, recurs daily      */ -}}
+{{- $scruthBackupStartBoundary := ""                                        -}}
+{{- if eq .chezmoi.hostname "FAMILYFUN"                                     -}}
+{{-   $scruthBackupStartBoundary = "2026-03-28T12:00:00"                    -}}
+{{- else if eq .chezmoi.hostname "RARSTEEN"                                 -}}
+{{-   $scruthBackupStartBoundary = "2026-03-28T09:30:00"                    -}}
+{{- else if eq .chezmoi.hostname "CRAFTINGISSEXY"                           -}}
+{{-   $scruthBackupStartBoundary = "2026-03-28T06:00:00"                    -}}
+{{- end                                                                     -}}
+{{- /*********************************************************************/ -}}
+{{- /* Chezmoi sourceDir override based on OS                            */ -}}
+{{- /*********************************************************************/ -}}
+{{- $sourceDir := .chezmoi.sourceDir                                        -}}
+{{- if eq .chezmoi.os "darwin"                                              -}}
+{{-   $sourceDir = (joinPath .chezmoi.sourceDir "/src/macos" | quote)       -}}
+{{- else if eq .chezmoi.os "windows"                                        -}}
+{{-   $sourceDir = (joinPath .chezmoi.sourceDir "/src/windows" | quote)     -}}
+{{- else                                                                    -}}
+{{-   warnf "Aborting. Unsupported OS: '%s'" .chezmoi.os                    -}}
+{{-   exit 1                                                                -}}
+{{- end                                                                     -}}
+{{ $baseSourceDir := (joinPath .chezmoi.sourceDir | quote)                  -}}
 sourceDir = {{ $sourceDir }}
 
 [data]
     baseSourceDir = {{ $baseSourceDir }}
     devbox = {{ $devbox }}
     gitSigningKey = "id_ed25519_github_windows"
+    scruthBackupStartBoundary = "{{ $scruthBackupStartBoundary }}"

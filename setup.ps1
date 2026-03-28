@@ -15,9 +15,9 @@ if (Test-IsAdmin) {
 ###############################################################################
 # Install chezmoi and dependencies
 ###############################################################################
-Write-HorizontalRule
+Write-HostHorizontalRule
 Write-Output "$ICON_ROCKET  Bootstrapping scruth-config, the ScruthSystem$ICON_TM manager extraordinaire!"
-Write-HorizontalRule
+Write-HostHorizontalRule
 
 # 1Password CLI
 $1pwdPackage = 'AgileBits.1Password.CLI'
