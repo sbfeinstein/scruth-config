@@ -17,15 +17,15 @@
 # "0x{0:X4}" -f [int][char]'•' # outputs 0x2022
 ###############################################################################
 
-$ICON_INFO     = [char]::ConvertFromUtf32(0x2139) + [char]::ConvertFromUtf32(0xFE0F)
-$ICON_CROSS    = [char]::ConvertFromUtf32(0x274C)
-$ICON_CHECK    = [char]::ConvertFromUtf32(0x2705)
-$ICON_MAGE     = [char]::ConvertFromUtf32(0x1F9D9)
-$ICON_ROCKET   = [char]::ConvertFromUtf32(0x1F680)
-$ICON_GLASSES  = [char]::ConvertFromUtf32(0x1F60E)
-$ICON_TM       = [char]::ConvertFromUtf32(0x2122)
-$ICON_WRENCH   = [char]::ConvertFromUtf32(0x1F527)
-$ICON_WARNING  = [char]::ConvertFromUtf32(0x26A0) + [char]::ConvertFromUtf32(0xFE0F)
+$ICON_INFO = [char]::ConvertFromUtf32(0x2139) + [char]::ConvertFromUtf32(0xFE0F)
+$ICON_CROSS = [char]::ConvertFromUtf32(0x274C)
+$ICON_CHECK = [char]::ConvertFromUtf32(0x2705)
+$ICON_MAGE = [char]::ConvertFromUtf32(0x1F9D9)
+$ICON_ROCKET = [char]::ConvertFromUtf32(0x1F680)
+$ICON_GLASSES = [char]::ConvertFromUtf32(0x1F60E)
+$ICON_TM = [char]::ConvertFromUtf32(0x2122)
+$ICON_WRENCH = [char]::ConvertFromUtf32(0x1F527)
+$ICON_WARNING = [char]::ConvertFromUtf32(0x26A0) + [char]::ConvertFromUtf32(0xFE0F)
 
 $UNICODE_BULLET = [char]::ConvertFromUtf32(0x2022)
 $UNICODE_EMDASH = [char]::ConvertFromUtf32(0x2014)
@@ -62,7 +62,7 @@ function Add-SystemPathEntry {
     # Write old path to a file for safety's sake
     $systemPathHistoryFile = "$HOME\.scruth-config\system_path_history.log"
     New-Item -Path "$HOME\.scruth-config" -ItemType Directory -Force | Out-Null
-    Add-Content -Path $systemPathHistoryFile -Value "$(Get-Date)`n$oldPath`n`n"
+    Add-Content -Path $systemPathHistoryFile -Value "$( Get-Date )`n$oldPath`n`n"
 
     # Need an elevated process to update the system path
     $newPathValue = "$oldPath;$binFolder"
@@ -90,7 +90,7 @@ function Find-InstallLocation {
 }
 
 function Get-CurrentPathEnv {
-    return [System.Environment]::ExpandEnvironmentVariables(([System.Environment]::GetEnvironmentVariable("Path","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path","User")))
+    return [System.Environment]::ExpandEnvironmentVariables(([System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")))
 }
 
 function Install-WinGetDefault {
@@ -135,7 +135,8 @@ function Invoke-ElevatedCommand {
         [Parameter(Mandatory)]
         [ScriptBlock]$ScriptBlock,
 
-        [switch]$Quiet
+        [switch]$Quiet,
+        [switch]$NoExecutionPolicy
     )
 
     #
@@ -156,12 +157,16 @@ function Invoke-ElevatedCommand {
     $commandText = "& { " + $ScriptBlock.ToString().Replace('"', '\"') + " } 2>&1 | Tee-Object -FilePath `"$logPath`""
 
     # Run elevated and wait to finish
+    $argList = @(
+        "-NoProfile"
+        "-Command", $commandText
+    )
+    if (-not $NoExecutionPolicy) {
+        $argList += "-ExecutionPolicy", "Bypass"
+    }
+
     $proc = Start-Process -FilePath "powershell.exe" `
-        -ArgumentList @(
-            "-NoProfile"
-            "-ExecutionPolicy", "Bypass"
-            "-Command", $commandText
-        ) `
+        -ArgumentList $argList `
         -Verb RunAs `
         -PassThru `
         -Wait
@@ -173,6 +178,7 @@ function Invoke-ElevatedCommand {
     if (-not $Quiet) {
         Write-Output "$ICON_CHECK  Done $DisplayLabel (exit $exit)."
     }
+
 }
 
 function Test-CommandExists {

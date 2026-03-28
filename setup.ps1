@@ -13,6 +13,25 @@ if (Test-IsAdmin) {
 }
 
 ###############################################################################
+# Execution Policy to RemoteSigned
+# See https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-5.1
+###############################################################################
+
+Get-ExecutionPolicy -List
+$executionPolicy = Get-ExecutionPolicy
+if ($executionPolicy -ne 'RemoteSigned') {
+    Write-HostCaution "Updating execution policy from '$executionPolicy' to 'RemoteSigned'."
+    $sb = [ScriptBlock]::Create(@"
+    Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+"@)
+    $params = @{
+        DisplayLabel = 'updating execution policy to RemoteSigned'
+        ScriptBlock = $sb
+    }
+    Invoke-ElevatedCommand -NoExecutionPolicy @params
+}
+
+###############################################################################
 # Install chezmoi and dependencies
 ###############################################################################
 Write-HostHorizontalRule
