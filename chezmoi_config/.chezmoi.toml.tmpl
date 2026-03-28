@@ -1,7 +1,7 @@
 {{- /*********************************************************************/ -}}
 {{- /* Hostname check                                                    */ -}}
 {{- /*********************************************************************/ -}}
-{{- if not (eq .chezmoi.hostname "FAMILYFUN" "RARSTEEN" "CRAFTINGISSEXY")   -}}
+{{- if not (eq .chezmoi.hostname "FAMILYFUN" "RARSTEENS" "CRAFTINGISSEXY")   -}}
 {{-   warnf "Aborting. Hostname '%s' not a ScruthSystem" .chezmoi.hostname  -}}
 {{-   exit 1                                                                -}}
 {{- end                                                                     -}}
@@ -10,14 +10,14 @@
 {{- /*********************************************************************/ -}}
 {{- /* devbox - "true" to install dev-related tools and configuration    */ -}}
 {{- $devbox := false                                                        -}}
-{{- if eq .chezmoi.hostname "FAMILYFUN" "RARSTEEN"                          -}}
+{{- if eq .chezmoi.hostname "FAMILYFUN" "RARSTEENS"                          -}}
 {{-   $devbox = true                                                        -}}
 {{- end                                                                     -}}
 {{- /* scruthBackupStartBoundary - scruth-backup time, recurs daily      */ -}}
 {{- $scruthBackupStartBoundary := ""                                        -}}
 {{- if eq .chezmoi.hostname "FAMILYFUN"                                     -}}
 {{-   $scruthBackupStartBoundary = "2026-03-28T12:00:00"                    -}}
-{{- else if eq .chezmoi.hostname "RARSTEEN"                                 -}}
+{{- else if eq .chezmoi.hostname "RARSTEENS"                                 -}}
 {{-   $scruthBackupStartBoundary = "2026-03-28T09:30:00"                    -}}
 {{- else if eq .chezmoi.hostname "CRAFTINGISSEXY"                           -}}
 {{-   $scruthBackupStartBoundary = "2026-03-28T06:00:00"                    -}}
