@@ -35,7 +35,8 @@ if ($executionPolicy -ne 'RemoteSigned') {
 # Install chezmoi and dependencies
 ###############################################################################
 Write-HostHorizontalRule
-Write-Output "$ICON_ROCKET  Bootstrapping scruth-config, the ScruthSystem$ICON_TM manager extraordinaire!"
+Write-Host "$ICON_ROCKET  Bootstrapping scruth-config, the ScruthSystem$ICON_TM manager extraordinaire!"
+Write-HostInfo "You may need to manually configure OneDrive to *not* sync Documents and other folders"
 Write-HostHorizontalRule
 
 # 1Password CLI
