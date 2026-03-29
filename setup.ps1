@@ -80,7 +80,7 @@ if ($sourcePath -and (Test-Path $sourcePath)) {
     }
 
     Write-Output "$ICON_CHECK  chezmoi updated and applied"
-    exit 0
+    return
 }
 
 Write-Output "$ICON_INFO  Initializing and applying chezmoi..."
