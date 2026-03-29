@@ -159,11 +159,11 @@ function Invoke-ElevatedCommand {
     # Run elevated and wait to finish
     $argList = @(
         "-NoProfile"
-        "-Command", $commandText
     )
     if (-not $NoExecutionPolicy) {
         $argList += "-ExecutionPolicy", "Bypass"
     }
+    $argList += "-Command", $commandText
 
     $proc = Start-Process -FilePath "powershell.exe" `
         -ArgumentList $argList `

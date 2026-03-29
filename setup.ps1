@@ -17,7 +17,6 @@ if (Test-IsAdmin) {
 # See https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_execution_policies?view=powershell-5.1
 ###############################################################################
 
-Get-ExecutionPolicy -List
 $executionPolicy = Get-ExecutionPolicy
 if ($executionPolicy -ne 'RemoteSigned') {
     Write-HostCaution "Updating execution policy from '$executionPolicy' to 'RemoteSigned'."
@@ -27,8 +26,9 @@ if ($executionPolicy -ne 'RemoteSigned') {
     $params = @{
         DisplayLabel = 'updating execution policy to RemoteSigned'
         ScriptBlock = $sb
+        NoExecutionPolicy = $true
     }
-    Invoke-ElevatedCommand -NoExecutionPolicy @params
+    Invoke-ElevatedCommand @params
 }
 
 ###############################################################################
