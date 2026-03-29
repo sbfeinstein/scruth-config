@@ -93,6 +93,43 @@ function Get-CurrentPathEnv {
     return [System.Environment]::ExpandEnvironmentVariables(([System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")))
 }
 
+function Grant-FolderFullControl {
+    [CmdletBinding(ConfirmImpact='High')]
+    param(
+        [Parameter(Mandatory)]
+        [string]$FolderPath,
+
+        [Parameter(Mandatory)]
+        [string]$UserName
+    )
+    process {
+        if (-not (Test-Path -Path $FolderPath -PathType Container)) {
+            Write-WarningCaution ("'$FolderPath' is not a valid directory")
+            return
+        }
+        $sb = [ScriptBlock]::Create(@"
+            `$Acl = Get-Acl -Path '$FolderPath'
+
+            `$AccessRule = New-Object System.Security.AccessControl.FileSystemAccessRule(
+                '$UserName',
+                'FullControl',
+                'ContainerInherit, ObjectInherit',
+                'None',
+                'Allow'
+            )
+            `$Acl.AddAccessRule(`$AccessRule)
+
+            # Apply the modified ACL to the folder
+            Set-Acl -Path '$FolderPath' -AclObject `$Acl
+"@)
+        $params = @{
+            DisplayLabel = "granting full control of '$FolderPath' to '$UserName'"
+            ScriptBlock = $sb
+        }
+        Invoke-ElevatedCommand @params
+    }
+}
+
 function Install-WinGetDefault {
     & winget import -i "$HOME\.scruth-config\.scruth_default_winget.json" @args
 }

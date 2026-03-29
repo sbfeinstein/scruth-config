@@ -1,0 +1,3 @@
+. {{ joinPath .chezmoi.sourceDir "dot_scruth-config/common.ps1" | quote }}
+
+Grant-FolderFullControl -FolderPath "C:\Windows\System32\Tasks\Scott tasks" -UserName "$Env:USERNAME"
