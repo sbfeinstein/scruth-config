@@ -1,0 +1,11 @@
+. {{ joinPath .chezmoi.sourceDir "dot_scruth-config/common.ps1" | quote }}
+
+$sb = [ScriptBlock]::Create("
+    Install-Module -Name PSWriteHTML -AllowClobber -Force
+    Install-Module -Name Mailozaurr -AllowClobber -Force
+")
+$params = @{
+    DisplayLabel = "installing PowerShell modules that support scruth-backup"
+    ScriptBlock = $sb
+}
+Invoke-ElevatedCommand @params
