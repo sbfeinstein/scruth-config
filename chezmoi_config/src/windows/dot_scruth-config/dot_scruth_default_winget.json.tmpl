@@ -6,11 +6,21 @@
     {
       "Packages" :
       [
+        {
+          "PackageIdentifier" : "AgileBits.1Password"
+        },
+        {
+          "PackageIdentifier" : "Rclone.Rclone"
+        },
+        {
+          "PackageIdentifier" : "SublimeHQ.SublimeText.4"
+        },
         {{ if .devbox }}
         {
           "PackageIdentifier" : "JetBrains.IntelliJIDEA"
         },
         {{ end }}
+        {{ if not .minimalWingetInstalls }}
         {
           "PackageIdentifier" : "7zip.7zip"
         },
@@ -33,12 +43,6 @@
           "PackageIdentifier" : "Zoom.Zoom.EXE"
         },
         {
-          "PackageIdentifier" : "AgileBits.1Password"
-        },
-        {
-          "PackageIdentifier" : "Rclone.Rclone"
-        },
-        {
           "PackageIdentifier" : "Gyan.FFmpeg"
         },
         {
@@ -48,10 +52,9 @@
           "PackageIdentifier" : "geeksoftwareGmbH.PDF24Creator"
         },
         {
-          "PackageIdentifier" : "SublimeHQ.SublimeText.4"
-        },        {
           "PackageIdentifier" : "jqlang.jq"
         },
+        {{ end }}
       ],
       "SourceDetails" :
       {

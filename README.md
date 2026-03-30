@@ -36,5 +36,4 @@ The legacy Windows "console", Command Prompt, Windows PowerShell and Windows Pow
 They have quirks related to Unicode character handling and chains of command calls.  
 It is likely that the emojis output by `scruth-config` will not render correctly though functionality isn't affected.
 
-
 For Windows systems, the scripts rely on the built-in [WinGet](https://learn.microsoft.com/en-us/windows/package-manager/winget/) for package management.

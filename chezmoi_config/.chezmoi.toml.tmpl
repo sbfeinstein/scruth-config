@@ -10,15 +10,19 @@
 {{- /*********************************************************************/ -}}
 {{- /* devbox - "true" to install dev-related tools and configuration    */ -}}
 {{- $devbox := false                                                        -}}
-{{- if eq .chezmoi.hostname "FAMILYFUN" "RARSTEENS"                          -}}
+{{- if eq .chezmoi.hostname "FAMILYFUN" "RARSTEENS"                         -}}
 {{-   $devbox = true                                                        -}}
 {{- end                                                                     -}}
 {{- /* scruthBackupStartBoundary - scruth-backup time, recurs daily      */ -}}
 {{- $scruthBackupStartBoundary := ""                                        -}}
+{{- /* minimalWingetInstalls - affects how the winget JSON is rendered   */ -}}
+{{- $minimalWingetInstalls := true                                          -}}
 {{- if eq .chezmoi.hostname "FAMILYFUN"                                     -}}
 {{-   $scruthBackupStartBoundary = "2026-03-28T12:00:00"                    -}}
-{{- else if eq .chezmoi.hostname "RARSTEENS"                                 -}}
+{{-   $minimalWingetInstalls = false                                        -}}
+{{- else if eq .chezmoi.hostname "RARSTEENS"                                -}}
 {{-   $scruthBackupStartBoundary = "2026-03-28T09:30:00"                    -}}
+{{-   $minimalWingetInstalls = false                                        -}}
 {{- else if eq .chezmoi.hostname "CRAFTINGISSEXY"                           -}}
 {{-   $scruthBackupStartBoundary = "2026-03-28T06:00:00"                    -}}
 {{- end                                                                     -}}
@@ -41,4 +45,5 @@ sourceDir = {{ $sourceDir }}
     baseSourceDir = {{ $baseSourceDir }}
     devbox = {{ $devbox }}
     gitSigningKey = "id_ed25519_github_windows"
+    minimalWingetInstalls = {{ $minimalWingetInstalls }}
     scruthBackupStartBoundary = "{{ $scruthBackupStartBoundary }}"
