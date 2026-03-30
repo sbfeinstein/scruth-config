@@ -1,7 +1,7 @@
 {{- /*********************************************************************/ -}}
 {{- /* Hostname check                                                    */ -}}
 {{- /*********************************************************************/ -}}
-{{- if not (eq .chezmoi.hostname "FAMILYFUN" "RARSTEENS" "CRAFTINGISSEXY")   -}}
+{{- if not (eq .chezmoi.hostname "FAMILYFUN" "RARSTEENS" "CraftingIsSexy")   -}}
 {{-   warnf "Aborting. Hostname '%s' not a ScruthSystem" .chezmoi.hostname  -}}
 {{-   exit 1                                                                -}}
 {{- end                                                                     -}}
@@ -23,7 +23,7 @@
 {{- else if eq .chezmoi.hostname "RARSTEENS"                                -}}
 {{-   $scruthBackupStartBoundary = "2026-03-28T09:30:00"                    -}}
 {{-   $minimalWingetInstalls = false                                        -}}
-{{- else if eq .chezmoi.hostname "CRAFTINGISSEXY"                           -}}
+{{- else if eq .chezmoi.hostname "CraftingIsSexy"                           -}}
 {{-   $scruthBackupStartBoundary = "2026-03-28T06:00:00"                    -}}
 {{- end                                                                     -}}
 {{- /*********************************************************************/ -}}

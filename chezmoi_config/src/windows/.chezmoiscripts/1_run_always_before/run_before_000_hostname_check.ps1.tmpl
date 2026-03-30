@@ -1,7 +1,7 @@
 . {{ joinPath .chezmoi.sourceDir "dot_scruth-config/common.ps1" | quote }}
 
 {{/* hostname check */}}
-{{- if not (eq .chezmoi.hostname "FAMILYFUN" "RARSTEENS" "CRAFTINGISSEXY") -}}
+{{- if not (eq .chezmoi.hostname "FAMILYFUN" "RARSTEENS" "CraftingIsSexy") -}}
 Write-Warning "$ICON_CROSS  This system ({{ .chezmoi.hostname -}}) is not an allowed ScruthSystem$ICON_TM, aborting setup"
 exit 1
 {{- else -}}

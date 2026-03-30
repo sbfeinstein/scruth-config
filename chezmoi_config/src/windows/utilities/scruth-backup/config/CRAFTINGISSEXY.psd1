@@ -1,6 +1,6 @@
 @{
     # Overrides go here
-    name = 'CRAFTINGISSEXY'
+    name = 'CraftingIsSexy'
     backup_tasks = @(
         @{SourceDrive = 'C'; FilterFile = 'C-source-filter.txt' }
     )

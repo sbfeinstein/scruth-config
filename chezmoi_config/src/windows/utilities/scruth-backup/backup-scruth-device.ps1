@@ -1,6 +1,6 @@
 # Command line parameters
 param(
-  [ValidateSet("CRAFTINGISSEXY", "FAMILYFUN", "RARSTEENS")]
+  [ValidateSet("CraftingIsSexy", "FAMILYFUN", "RARSTEENS")]
   [Parameter(Mandatory = $true, HelpMessage = "Specify the computer name.")] 
   [string]$ComputerParam,
 
