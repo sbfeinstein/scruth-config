@@ -1,15 +1,25 @@
-# rclone filters are used to select what to back up
+###############################################################################
+# scruth-backup
+# rclone filters are used to select what to back up (or not)
+###############################################################################
 
+###############################################################################
 # Exclude always
+###############################################################################
 - .git/**
 - .idea/**
 - .vscode/**
 
+###############################################################################
 # Include specific files and folders of interest
+###############################################################################
 + /Users/scott/Desktop/**
 
-# task scheduler tasks
-+ /Windows/System32/Tasks/+Scott tasks
+# While some of these files are redundant due to being in the source of scruth-config
+# other files in this directory are generated or exported and so good to back up.
+# Note that rclone to protected folders like this commented example is annoying to get to work correctly.
+# + /Windows/System32/Tasks/+Scott tasks
++ /Users/scott/.scruth-config/**
 
 # Exclude everything else
 - *

@@ -1,4 +1,3 @@
-# Command line parameters
 param(
   [ValidateSet("CraftingIsSexy", "FAMILYFUN", "RARSTEENS")]
   [Parameter(Mandatory = $true, HelpMessage = "Specify the computer name.")] 
@@ -32,6 +31,14 @@ if ($EmailTestOnly) {
 if (!(Ping-Destination -Config $config)) {
   throw 'Aborting due to unreachable backup destination'
 }
+
+# Export existing scheduled tasks so they can be backed up
+# If we have more cases like this in the future, refactor to a pre-backup hook or similar.
+$taskSchedulerPath = '\Scott tasks\'
+$exportPath = "$HOME\.scruth-config\exported-scott-scheduled-tasks.xml"
+Write-Host "Exporting '$taskSchedulerPath' from Task Scheduler, to $exportPath"
+Get-ScheduledTask -TaskPath $taskSchedulerPath | Export-ScheduledTask | Out-File -FilePath $exportPath -Encoding UTF8
+Write-Host "Done exporting '$taskSchedulerPath' from Task Scheduler, to $exportPath"
 
 $output = Invoke-Backup-Device -Config $config
 Send-JobReportEmail -Config $config -BackupJob $output
