@@ -12,6 +12,8 @@ brew "git"
 brew "gnupg"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
+# Manage multiple Node.js versions
+brew "nvm"
 # Password manager that keeps all passwords secure behind one password
 cask "1password"
 # Command-line interface for 1Password

@@ -5,6 +5,10 @@ export DEFAULT_USER='sfeinstein'
 # Homebrew
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
+# Node related (nvm, etc)
+# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/nvm
+export NVM_HOMEBREW="$HOMEBREW_PREFIX/opt/nvm"
+
 # SDKMAN!
 . "{{ .chezmoi.homeDir }}/.sdkman/bin/sdkman-init.sh"
 
