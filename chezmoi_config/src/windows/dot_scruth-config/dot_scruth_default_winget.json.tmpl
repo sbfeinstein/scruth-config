@@ -55,6 +55,11 @@
           "PackageIdentifier" : "jqlang.jq"
         },
         {{ end }}
+        {{ if .installPlex }}
+        {
+          "PackageIdentifier" : "Plex.Plex"
+        },
+        {{ end }}
       ],
       "SourceDetails" :
       {

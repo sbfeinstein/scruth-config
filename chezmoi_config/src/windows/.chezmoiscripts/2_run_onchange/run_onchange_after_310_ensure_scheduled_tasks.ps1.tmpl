@@ -1,31 +1,63 @@
 . {{ joinPath .chezmoi.sourceDir "dot_scruth-config/common.ps1" | quote }}
 
-# If any of these other files change, we want to re-check for tasks since they should have been deleted
-# by a previous script
+# Globals
+$taskFolder = "\Scott tasks\"
+
+###############################################################################
+# scruth-backup
+#
+# To force re-running of this chezmoi script if they change
 # {{ include (joinPath .chezmoi.homeDir "utilities/scruth-backup/backup-scruth-task.xml") | sha256sum }}
 # {{ include (joinPath .chezmoi.homeDir "utilities/scruth-backup/backup-scruth-device.ps1") | sha256sum }}
 # {{ include (joinPath .chezmoi.homeDir "utilities/scruth-backup/backup-scruth-device-wrapper.ps1") | sha256sum }}
+###############################################################################
 
-$taskFolder = "\Scott tasks\"
 $taskName = "scruth-backup"
 $taskFullName = $taskFolder + $taskName
-
 $targetTask = Get-ScheduledTask -TaskPath $taskFolder -TaskName $taskName -ErrorAction SilentlyContinue
-
 if ($targetTask) {
     Write-Verbose "$ICON_INFO  Skipping creating $taskFullName in Task Scheduler since it already exists"
-    return
+} else {
+    $taskXmlDef = {{ joinPath .chezmoi.homeDir "utilities/scruth-backup/backup-scruth-task.xml" | quote }}
+    $pwd = op read "op://kmhwtn4fzf2vhyq3luti556edu/Microsoft - Scott/password"
+
+    # Must use a ScriptBlock to evaluate the vars using the current process
+    $sb = [ScriptBlock]::Create("
+        schtasks.exe /create /xml '$taskXmlDef' /tn '$taskFullName' /f /rp '$pwd' /ru 'scott'
+    ")
+    $params = @{
+        DisplayLabel = "creating $taskFullName in Task Scheduler"
+        ScriptBlock = $sb
+    }
+    Invoke-ElevatedCommand @params
 }
 
-$taskXmlDef = {{ joinPath .chezmoi.homeDir "utilities/scruth-backup/backup-scruth-task.xml" | quote }}
-$pwd = op read "op://kmhwtn4fzf2vhyq3luti556edu/Microsoft - Scott/password"
+###############################################################################
+# plex
+#
+# To force re-running of this chezmoi script if they change
+# {{ include (joinPath .chezmoi.homeDir ".scruth-config/plex-on-startup-task.xml") | sha256sum }}
+###############################################################################
 
-# Must use a ScriptBlock to evaluate the vars using the current process
-$sb = [ScriptBlock]::Create("
-    schtasks.exe /create /xml '$taskXmlDef' /tn '$taskFullName' /f /rp '$pwd' /ru 'scott'
-")
-$params = @{
-    DisplayLabel = "creating $taskFullName in Task Scheduler"
-    ScriptBlock = $sb
+{{ if .installPlex }}
+$taskName = "Plex"
+$taskFullName = $taskFolder + $taskName
+$targetTask = Get-ScheduledTask -TaskPath $taskFolder -TaskName $taskName -ErrorAction SilentlyContinue
+if ($targetTask) {
+    Write-Verbose "$ICON_INFO  Skipping creating $taskFullName in Task Scheduler since it already exists"
+} else {
+    $taskXmlDef = {{ joinPath .chezmoi.homeDir ".scruth-config/plex-on-startup-task.xml" | quote }}
+    $pwd = op read "op://kmhwtn4fzf2vhyq3luti556edu/Microsoft - Scott/password"
+
+    # Must use a ScriptBlock to evaluate the vars using the current process
+    $sb = [ScriptBlock]::Create("
+        schtasks.exe /create /xml '$taskXmlDef' /tn '$taskFullName' /f /rp '$pwd' /ru 'scott'
+        schtasks.exe /run /tn '$taskFullName'
+    ")
+    $params = @{
+        DisplayLabel = "creating $taskFullName in Task Scheduler"
+        ScriptBlock = $sb
+    }
+    Invoke-ElevatedCommand @params
 }
-Invoke-ElevatedCommand @params
+{{ end }}
