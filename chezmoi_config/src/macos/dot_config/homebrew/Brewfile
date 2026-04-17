@@ -29,6 +29,8 @@ cask "google-chrome"
 cask "intellij-idea"
 # Digital note taking app
 cask "microsoft-onenote"
+# Android file transfer
+cask "openmtp"
 # Instant messaging application focusing on security
 cask "signal"
 # Music streaming service
