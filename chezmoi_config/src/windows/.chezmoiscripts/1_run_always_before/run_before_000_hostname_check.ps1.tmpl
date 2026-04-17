@@ -6,6 +6,6 @@ Write-Warning "$ICON_CROSS  This system ({{ .chezmoi.hostname -}}) is not an all
 exit 1
 {{- else -}}
 Write-HostHorizontalRule
-Write-Output "$ICON_ROCKET  Setting up ScruthSystem$ICON_TM {{ .chezmoi.hostname -}}, a Windows computer"
+Write-Output "$ICON_ROCKET  Updating {{ .chezmoi.hostname -}}, a ScruthSystem$ICON_TM Windows computer"
 Write-HostHorizontalRule
 {{- end -}}
