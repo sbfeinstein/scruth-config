@@ -1,0 +1,11 @@
+. {{ joinPath .chezmoi.sourceDir "dot_scruth-config/common.ps1" | quote }}
+
+$sb = [ScriptBlock]::Create(@"
+    Write-Output "Under Construction"
+"@)
+
+$params = @{
+    DisplayLabel = "configuring system to wake on LAN magic packet (BIOS change may also be needed)"
+    ScriptBlock = $sb
+}
+Invoke-ElevatedCommand @params

@@ -93,6 +93,10 @@ function Get-CurrentPathEnv {
     return [System.Environment]::ExpandEnvironmentVariables(([System.Environment]::GetEnvironmentVariable("Path", "Machine") + ";" + [System.Environment]::GetEnvironmentVariable("Path", "User")))
 }
 
+function Get-FirstUpMacAddress {
+    return (Get-NetAdapter | ? Status -eq "Up" | select -f 1).MacAddress
+}
+
 function Grant-FolderFullControl {
     [CmdletBinding(ConfirmImpact='High')]
     param(
@@ -218,6 +222,51 @@ function Invoke-ElevatedCommand {
 
 }
 
+function Ping-Path {
+    param (
+        [Parameter(Mandatory)]
+        [string]$MacAddress,
+
+        [Parameter(Mandatory)]
+        [string]$Path
+    )
+
+    Write-HostInfo "Checking if path '$Path' is reachable"
+    $isAwake = Test-Path $Path
+    $attempts = 1
+    $maxAttempts = 3
+
+    while (!$isAwake -and $attempts -le $maxAttempts) {
+        Write-HostCaution "Path '$Path' is not reachable (attempt $attempts), sending magic packet $MacAddress and waiting 5 seconds"
+        Send-MagicPacket -MacAddress $MacAddress
+        Start-Sleep -Seconds 5
+        $attempts++
+        $isAwake = Test-Path $Path
+    }
+
+    if ($isAwake) {
+        Write-HostSuccess "Path '$Path' is reachable"
+        return $true
+    } else {
+        Write-HostCaution "Path '$Path' is not reachable and max retries reached"
+        return $false
+    }
+}
+
+function Send-MagicPacket {
+
+    param (
+        [string]$MacAddress
+    )
+
+    $macByteArray = $MacAddress -split "[:-]" | ForEach-Object { [Byte] "0x$_"}
+    [Byte[]] $magicPacket = (,0xFF * 6) + ($macByteArray * 16)
+    $udpClient = New-Object System.Net.Sockets.UdpClient
+    $udpClient.Connect(([System.Net.IPAddress]::Broadcast),7)
+    $udpClient.Send($magicPacket,$magicPacket.Length) | Out-Null
+    $udpClient.Close()
+}
+
 function Test-CommandExists {
     param([string]$CmdName)
     $c = Get-Command $CmdName -ErrorAction SilentlyContinue
@@ -230,6 +279,14 @@ function Test-CommandExists {
 function Test-IsAdmin {
     $currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
     return $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+function Test-IsFAMILYFUNReachable {
+    Ping-Path -MacAddress "A8-5E-45-53-14-FA" -Path "\\FAMILYFUN\C"
+}
+
+function Test-IsRARSTEENSReachable {
+    Ping-Path -MacAddress "FC-B0-DE-38-5E-CF" -Path "\\RARSTEENS\C"
 }
 
 function Write-HostHorizontalRule {
