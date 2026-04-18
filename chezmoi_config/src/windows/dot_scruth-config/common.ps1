@@ -237,7 +237,7 @@ function Ping-Path {
     $maxAttempts = 3
 
     while (!$isAwake -and $attempts -le $maxAttempts) {
-        Write-HostCaution "Path '$Path' is not reachable (attempt $attempts), sending magic packet $MacAddress and waiting 5 seconds"
+        Write-HostCaution "Path '$Path' is not reachable (attempt $attempts), sending magic packet to $MacAddress and waiting 5 seconds"
         Send-MagicPacket -MacAddress $MacAddress
         Start-Sleep -Seconds 5
         $attempts++
