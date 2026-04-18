@@ -281,6 +281,10 @@ function Test-IsAdmin {
     return $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 
+function Test-IsCraftingIsSexReachable {
+    Ping-Path -MacAddress "F8-89-D2-AF-DC-0F" -Path "\\CraftingIsSexy\C"
+}
+
 function Test-IsFAMILYFUNReachable {
     Ping-Path -MacAddress "A8-5E-45-53-14-FA" -Path "\\FAMILYFUN\C"
 }
