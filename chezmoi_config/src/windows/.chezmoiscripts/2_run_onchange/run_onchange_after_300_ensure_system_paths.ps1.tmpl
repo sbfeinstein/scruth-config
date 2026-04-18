@@ -3,6 +3,10 @@
 # System Path updates get their own file since we always want to check for and
 # "repair" if necessary paths are missing.
 
+# ffmpeg
+$ffmpegPath = Find-InstallLocation 'Gyan.FFmpeg'
+Add-SystemPathEntry -CmdBasePath $ffmpegPath -CmdFile 'ffmpeg.exe' -PrettyName 'ffmpeg'
+
 # git
 $gitPath = Find-InstallLocation 'Git.Git'
 Add-SystemPathEntry -CmdBasePath $gitPath -CmdFile 'git.exe' -PrettyName 'git'
