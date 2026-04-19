@@ -14,6 +14,7 @@
 # Include specific files and folders of interest
 ###############################################################################
 + /Users/scott/Desktop/**
++ /Users/asher/Documents/important/**
 
 # While some of these files are redundant due to being in the source of scruth-config
 # other files in this directory are generated or exported and so good to back up.
