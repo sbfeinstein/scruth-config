@@ -37,3 +37,4 @@ foreach ($File in $VideoFiles) {
         if (Test-Path $TempOutputFile) { Remove-Item $TempOutputFile }
     }
 }
+Write-HostSuccess "Done processing videos in $SourceDir!"
