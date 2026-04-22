@@ -24,6 +24,8 @@ foreach ($File in $VideoFiles) {
     Write-HostInfo "Processing: $($File.FullName)"
 
     # Added -map_metadata 0 to keep your family memories' original dates/locations
+    # This boils down to commands like:
+    # ffmpeg -i 'in.mpg' -vcodec libx265 -crf 28 -tag:v hvc1 -acodec aac -map_metadata 0 'out.mp4'
     $Args = "-i `"$($File.FullName)`" -vcodec libx265 -crf 28 -tag:v hvc1 -acodec aac -map_metadata 0 `"$TempOutputFile`""
 
     $process = Start-Process -FilePath $FFmpegPath -ArgumentList $Args -Wait -NoNewWindow -PassThru
