@@ -12,6 +12,8 @@ brew "git"
 brew "gnupg"
 # Lightweight and flexible command-line JSON processor
 brew "jq"
+# Handy way to save and run project-specific commands
+brew "just"
 # Manage multiple Node.js versions
 brew "nvm"
 # Password manager that keeps all passwords secure behind one password
