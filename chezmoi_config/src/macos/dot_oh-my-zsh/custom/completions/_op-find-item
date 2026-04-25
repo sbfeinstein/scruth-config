@@ -1,0 +1,7 @@
+#compdef op-find-item
+
+_op_find_item_completion() {
+  eval $(env _TYPER_COMPLETE_ARGS="${words[1,$CURRENT]}" _OP_FIND_ITEM_COMPLETE=complete_zsh op-find-item)
+}
+
+compdef _op_find_item_completion op-find-item
