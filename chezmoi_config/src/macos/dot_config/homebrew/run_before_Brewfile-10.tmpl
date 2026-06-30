@@ -23,7 +23,14 @@ if [ ! -f "$BREWFILE" ]; then
   exit
 fi
 
-echo "Updating source Brewfile from installed packages"
+BREWFILE_TEMP=$(mktemp)
+brew bundle dump --force --file="$BREWFILE_TEMP"
+
+if diff -q "$BREWFILE" "$BREWFILE_TEMP" &>/dev/null; then
+  # silently exit since there are no updates needed to the Brewfile
+  rm "$BREWFILE_TEMP"
+  exit
+fi
 
 # Update the chezmoi source Brewfile to include any Brew packages that were installed directly
 # (not via Brewfile).  This may seem circular or counterintuitive but the idea is that most
@@ -33,4 +40,7 @@ echo "Updating source Brewfile from installed packages"
 # Similarly, if normal brew commands are used to uninstall a package, a "chezmoi apply" will
 # again update the source so that it is in a nice state for fully initializing and managing
 # the systems.
+
+echo "Brew dependency differences detected, updating source Brewfile to match installed packages"
+mv "$BREWFILE_TEMP" "$BREWFILE"
 brew bundle dump --force --file="$BREWFILE"
