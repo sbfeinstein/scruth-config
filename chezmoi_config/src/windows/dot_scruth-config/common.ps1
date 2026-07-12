@@ -80,6 +80,26 @@ function Add-SystemPathEntry {
     return
 }
 
+function Reset-ChezmoiEntryStateForFile {
+    param(
+        [string]$file
+    )
+    chezmoi state delete --bucket="entryState" --key=$file
+}
+
+function Reset-ChezmoiScriptStateForKey {
+    param(
+        [string]$key
+    )
+    chezmoi state delete --bucket="scriptState" --key=$key
+}
+
+function Reset-ChezmoiStateForSystemPaths {
+    $key = Get-ChezmoiScriptStateForScript ".chezmoiscripts/2_run_onchange/300_ensure_system_paths.ps1"
+    Reset-ChezmoiScriptStateForKey $key
+    Reset-ChezmoiEntryStateForFile "C:/Users/scott/.chezmoiscripts/2_run_onchange/300_ensure_system_paths.ps1"
+}
+
 function Find-InstallLocation {
     param(
         [string]$Pkg
@@ -87,6 +107,26 @@ function Find-InstallLocation {
     return winget list --details -e $Pkg |
             Select-String 'Installed Location:' |
             ForEach-Object { $_.ToString().Split(':', 2)[1].Trim() }
+}
+
+function Get-ChezmoiEntryState {
+    chezmoi state get-bucket --bucket="entryState"
+}
+
+function Get-ChezmoiScriptState {
+    chezmoi state get-bucket --bucket="scriptState"
+}
+
+function Get-ChezmoiScriptStateForScript {
+    param(
+        [string]$script
+    )
+    $json = chezmoi state get-bucket --bucket="scriptState"
+    $obj = $json | ConvertFrom-Json
+    $targetKey = $obj.psobject.Properties |
+         Where-Object { $_.Value.name -eq $script } |
+         Select-Object -ExpandProperty Name
+    Write-Output $targetKey
 }
 
 function Get-CurrentPathEnv {
