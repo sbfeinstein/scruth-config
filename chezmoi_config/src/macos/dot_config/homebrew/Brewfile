@@ -46,4 +46,4 @@ cask "visual-studio-code"
 # Video communication and virtual meeting platform
 cask "zoom"
 vscode "yzhang.markdown-all-in-one"
-uv "op-find-item", source: "file:///Users/sfeinstein/source/op-find-item"
+uv "op-find-item"

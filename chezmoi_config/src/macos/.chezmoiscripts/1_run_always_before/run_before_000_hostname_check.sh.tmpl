@@ -1,0 +1,24 @@
+#!/bin/bash
+set -euo pipefail
+
+hostname=$(scutil --get ComputerName)
+
+_check_machine_is_scruthsystem() {
+  is_allowed_scruthsystem() {
+    ALLOWED_HOSTNAMES=("sfeinstein-studio-m4")
+    for allowed_hostname in "${ALLOWED_HOSTNAMES[@]}"; do
+      if [[ "$hostname" == "$allowed_hostname" ]]; then
+        return 0
+      fi
+    done
+    return 1
+  }
+
+  if is_allowed_scruthsystem; then
+    echo "🚀 Configuring ScruthSystem™️  $hostname"
+  else
+    echo "❌ $hostname is not a recognized ScruthSystem™️  , aborting setup"
+    exit 1
+  fi
+}
+_check_machine_is_scruthsystem

@@ -20,7 +20,7 @@ DEST_BREWFILE={{ joinPath .chezmoi.homeDir ".config/homebrew/Brewfile" | quote }
 SOURCE_BREWFILE={{ joinPath .chezmoi.sourceDir "dot_config/homebrew/Brewfile" | quote }}
 
 if [ ! -f "$DEST_BREWFILE" ]; then
-  echo "Destination Brewfile does not exist; skipping updating source Brewfile under the assumption this is a first install"
+  echo "ℹ️ Destination Brewfile does not exist; not updating scruth-config source since this may be an initial install"
   exit
 fi
 
@@ -28,7 +28,7 @@ BREWFILE_TEMP=$(mktemp)
 brew bundle dump --force --file="$BREWFILE_TEMP"
 
 if diff -q "$SOURCE_BREWFILE" "$BREWFILE_TEMP" &>/dev/null; then
-  echo "The scruth-config (chezmoi) source Brewfile matches what is installed on the system"
+  echo "✅ Brewfile (scruth-config source) matches the system"
   rm "$BREWFILE_TEMP"
   exit
 fi
@@ -42,6 +42,6 @@ fi
 # again update the source so that it is in a nice state for fully initializing and managing
 # the systems.
 
-echo "Brew dependency differences detected, updating source Brewfile to match installed packages"
 mv "$BREWFILE_TEMP" "$SOURCE_BREWFILE"
 brew bundle dump --force --file="$SOURCE_BREWFILE"
+echo "✅️ Updated scruth-config source Brewfile to match system"

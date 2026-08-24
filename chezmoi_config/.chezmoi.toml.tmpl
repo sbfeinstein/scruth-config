@@ -1,11 +1,4 @@
 {{- /*********************************************************************/ -}}
-{{- /* Hostname check                                                    */ -}}
-{{- /*********************************************************************/ -}}
-{{- if not (eq .chezmoi.hostname "FAMILYFUN" "RARSTEENS" "CraftingIsSexy")   -}}
-{{-   warnf "Aborting. Hostname '%s' not a ScruthSystem" .chezmoi.hostname  -}}
-{{-   exit 1                                                                -}}
-{{- end                                                                     -}}
-{{- /*********************************************************************/ -}}
 {{- /* Flags                                                             */ -}}
 {{- /*********************************************************************/ -}}
 {{- /* devbox - "true" to install dev-related tools and configuration    */ -}}

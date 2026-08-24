@@ -1,0 +1,5 @@
+#!/bin/bash
+set -euo pipefail
+
+git -C {{ .chezmoi.sourceDir }} remote set-url origin git@github.com:sbfeinstein/scruth-config.git
+echo "✅ Forced git to SSH for {{ .chezmoi.sourceDir }}"

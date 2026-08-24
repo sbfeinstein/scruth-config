@@ -2,7 +2,7 @@
 set -eufo pipefail
 
 if [ -f ~/.oh-my-zsh/oh-my-zsh.sh ]; then
-  echo "✅  oh-my-zsh is already installed."
+  echo "✅ oh-my-zsh is already installed."
 else
   echo "💻  Installing oh-my-zsh"
   chsh -s "$(which zsh)"
@@ -16,5 +16,5 @@ else
     exit "$exit_code"
   fi
 
-  echo "✅  oh-my-zsh installed successfully (an exit code of 141 is OK and expected)"
+  echo "✅ oh-my-zsh installed successfully (an exit code of 141 is OK and expected)"
 fi

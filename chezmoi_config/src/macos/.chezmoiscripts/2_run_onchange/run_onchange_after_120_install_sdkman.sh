@@ -8,10 +8,15 @@ set -eufo pipefail
 #
 # Per https://sdkman.io/install/ we prevent shell modifications since we
 # manage .zshrc and other config directly in scruth-config.
-if which -s "sdk"; then
-  echo "✅  SDKMAN! is already installed"
+
+# Check for the init file not the command since sdk is a shell alias that won't
+# have been sourced when this script runs during chezmoi apply.
+SDKMAN_INIT="$HOME/.sdkman/bin/sdkman-init.sh"
+
+if [ -s "$SDKMAN_INIT" ]; then
+  echo "✅ SDKMAN! is already installed"
 else
   echo "🛠️  Installing SDKMAN!"
   curl -s "https://get.sdkman.io?rcupdate=false" | bash
-  echo "✅  SDKMAN! installed successfully"
+  echo "✅ SDKMAN! installed successfully"
 fi

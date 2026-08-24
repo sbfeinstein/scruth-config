@@ -9,9 +9,9 @@ set -eufo pipefail
 # Per https://docs.astral.sh/uv/reference/installer/ we prevent shell modifications since we
 # manage .zshrc and other config directly in scruth-config.
 if which -s "uv"; then
-  echo "✅  uv is already installed"
+  echo "✅ uv is already installed"
 else
   echo "🛠️  Installing uv"
   curl -LsSf https://astral.sh/uv/install.sh | env UV_NO_MODIFY_PATH=1 sh
-  echo "✅  uv installed successfully"
+  echo "✅ uv installed successfully"
 fi
