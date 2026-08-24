@@ -1,0 +1,18 @@
+#!/bin/bash
+set -euo pipefail
+
+echo "ℹ️ Running brew update"
+brew update
+
+{{ if eq .upgrade_software "true" }}
+echo "ℹ️ Running brew upgrade"
+brew upgrade
+{{ else }}
+echo "ℹ️ Running brew outdated"
+brew outdated
+echo "ℹ️ To upgrade managed software, run:"
+echo "  scruth-config --upgrade"
+{{ end }}
+
+echo "ℹ️ Running brew doctor"
+brew doctor

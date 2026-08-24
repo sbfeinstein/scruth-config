@@ -3,7 +3,7 @@
 {{- /*********************************************************************/ -}}
 {{- /* devbox - "true" to install dev-related tools and configuration    */ -}}
 {{- $devbox := false                                                        -}}
-{{- if eq .chezmoi.hostname "FAMILYFUN" "RARSTEENS"                         -}}
+{{- if eq .chezmoi.hostname "FAMILYFUN" "RARSTEENS" "sfeinstein-studio-m4"  -}}
 {{-   $devbox = true                                                        -}}
 {{- end                                                                     -}}
 {{- /* minimalWingetInstalls - affects how the winget JSON is rendered   */ -}}
@@ -25,10 +25,13 @@
 {{- /*********************************************************************/ -}}
 {{- /* Chezmoi sourceDir override based on OS                            */ -}}
 {{- /*********************************************************************/ -}}
+{{- $gitSigningKey := ""                                                    -}}
 {{- $sourceDir := .chezmoi.sourceDir                                        -}}
 {{- if eq .chezmoi.os "darwin"                                              -}}
+{{-   $gitSigningKey = "id_github"                                          -}}
 {{-   $sourceDir = (joinPath .chezmoi.sourceDir "/src/macos" | quote)       -}}
 {{- else if eq .chezmoi.os "windows"                                        -}}
+{{-   $gitSigningKey = "id_ed25519_github_windows"                          -}}
 {{-   $sourceDir = (joinPath .chezmoi.sourceDir "/src/windows" | quote)     -}}
 {{- else                                                                    -}}
 {{-   warnf "Aborting. Unsupported OS: '%s'" .chezmoi.os                    -}}
@@ -38,9 +41,13 @@
 sourceDir = {{ $sourceDir }}
 
 [data]
+    upgrade_software = "false"
     baseSourceDir = {{ $baseSourceDir }}
     devbox = {{ $devbox }}
-    gitSigningKey = "id_ed25519_github_windows"
+    gitSigningKey = "{{ $gitSigningKey }}"
+
+{{- if eq .chezmoi.os "windows"                                             -}}
     installPlex = {{ $installPlex }}
     minimalWingetInstalls = {{ $minimalWingetInstalls }}
     scruthBackupStartBoundary = "{{ $scruthBackupStartBoundary }}"
+{{- end                                                                     -}}
