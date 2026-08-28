@@ -43,9 +43,9 @@ brew-search() {
   echo "$OUTPUT_VAR" | column -s $'\t' -t
 }
 
-# scruth-config
-scruth-config() {
-    if [ "${1:-}" = "--upgrade" ]; then
+# scruth-config "CLI"
+scruth() {
+    if [ "${1:-}" = "up" ]; then
         chezmoi apply --override-data '{"upgrade_software": "true"}' && omz reload
     else
         chezmoi apply && omz reload
