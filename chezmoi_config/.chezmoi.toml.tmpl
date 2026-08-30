@@ -45,8 +45,7 @@ sourceDir = {{ $sourceDir }}
     baseSourceDir = {{ $baseSourceDir }}
     devbox = {{ $devbox }}
     gitSigningKey = "{{ $gitSigningKey }}"
-
-{{- if eq .chezmoi.os "windows"                                             -}}
+{{ if eq .chezmoi.os "windows"                                             }}
     installPlex = {{ $installPlex }}
     minimalWingetInstalls = {{ $minimalWingetInstalls }}
     scruthBackupStartBoundary = "{{ $scruthBackupStartBoundary }}"

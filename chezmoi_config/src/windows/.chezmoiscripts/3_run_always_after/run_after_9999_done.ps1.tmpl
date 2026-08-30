@@ -1,0 +1,3 @@
+. {{ joinPath .chezmoi.sourceDir "dot_scruth-config/common.ps1" | quote }}
+
+Write-Output "$ICON_ROCKET Done configuring ScruthSystem$ICON_TM {{ .chezmoi.hostname -}}"

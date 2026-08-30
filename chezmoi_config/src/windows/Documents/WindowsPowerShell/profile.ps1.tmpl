@@ -10,6 +10,8 @@ Remove-Item Alias:gp -Force
 # scruth-config
 # Generally load its common PowerShell helpers and constants 'cause why not
 . {{ joinPath .chezmoi.sourceDir "dot_scruth-config/common.ps1" | quote }}
+$scruthScript = {{ joinPath .chezmoi.homeDir ".scruth-config/scruth.ps1" | quote }}
+Set-Alias -Name scruth -Value $scruthScript
 
 # Aliases
 function chez { chezmoi apply }

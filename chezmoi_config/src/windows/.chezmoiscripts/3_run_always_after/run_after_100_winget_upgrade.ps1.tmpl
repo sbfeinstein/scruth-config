@@ -1,0 +1,15 @@
+. {{ joinPath .chezmoi.sourceDir "dot_scruth-config/common.ps1" | quote }}
+
+{{ if eq .upgrade_software "true" }}
+
+Write-Output "$ICON_INFO Running winget upgrade --all"
+& winget upgrade --all
+
+{{ else }}
+
+Write-Output "$ICON_INFO Running winget list --upgrade-available"
+winget list --upgrade-available
+
+Write-Output "$ICON_INFO To upgrade managed software, run:"
+Write-Output "  scruth up"
+{{ end }}

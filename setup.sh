@@ -75,6 +75,7 @@ else
   # And we need the apply to pick up the new value, which it didn't seem to do consistently
   # when we combined commands.
   chezmoi init sbfeinstein/scruth-config --branch main
+  chezmopi init # HACK to avoid "your config needs to be regenerated" message, likely due to changing sourceDir
   echo "Finished Initializing Chezmoi"
 fi
 

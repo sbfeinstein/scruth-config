@@ -248,7 +248,7 @@ function Invoke-ElevatedCommand {
 
     $proc = Start-Process -FilePath "powershell.exe" `
         -ArgumentList $argList `
-        -Verb RunAs `
+        -Verb  RunAs `
         -PassThru `
         -Wait
 
