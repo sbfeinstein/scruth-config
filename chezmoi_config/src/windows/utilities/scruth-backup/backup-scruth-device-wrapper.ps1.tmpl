@@ -1,7 +1,21 @@
-$1pwdTokenPath = {{ joinPath .chezmoi.homeDir ".config/1password/scruth-config_SA_token.xml" | quote }}
+$LogPath = {{ joinPath .chezmoi.homeDir "utilities/scruth-backup/backup.log" | quote }}
+Start-Transcript -Path $LogPath -Append -Force
 
-$secure = Get-Content $1pwdTokenPath | ConvertTo-SecureString
-$ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
-$plain = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($ptr)
+try {
+    $1pwdTokenPath = {{ joinPath .chezmoi.homeDir ".config/1password/scruth-config_SA_token.xml" | quote }}
+    $secure = Get-Content $1pwdTokenPath | ConvertTo-SecureString
+    $ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($secure)
+    $plain = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($ptr)
+    $Env:OP_SERVICE_ACCOUNT_TOKEN = $plain
 
-$Env:OP_SERVICE_ACCOUNT_TOKEN = $plain; & {{ joinPath .chezmoi.homeDir "utilities/scruth-backup/backup-scruth-device.ps1" }} @args; Remove-Item Env:\OP_SERVICE_ACCOUNT_TOKEN
+    & {{ joinPath .chezmoi.homeDir "utilities/scruth-backup/backup-scruth-device.ps1" }} @args 2>&1
+}
+catch {
+    Write-Error "Wrapper script failed: $_"
+}
+finally {
+    if (Test-Path Env:\OP_SERVICE_ACCOUNT_TOKEN) {
+        Remove-Item Env:\OP_SERVICE_ACCOUNT_TOKEN
+    }
+    Stop-Transcript
+}
