@@ -29,6 +29,8 @@ cask "font-jetbrains-mono-nerd-font"
 cask "godot"
 # Web browser
 cask "google-chrome"
+# Homebrew's official GUI
+cask "homebrew-app"
 # Java IDE by JetBrains
 cask "intellij-idea"
 # Digital note taking app
