@@ -5,7 +5,7 @@ hostname=$(scutil --get ComputerName)
 
 _check_machine_is_scruthsystem() {
   is_allowed_scruthsystem() {
-    ALLOWED_HOSTNAMES=("sfeinstein-studio-m4", "Scott's MacBook Pro")
+    ALLOWED_HOSTNAMES=("sfeinstein-studio-m4" "Scott's MacBook Pro")
     for allowed_hostname in "${ALLOWED_HOSTNAMES[@]}"; do
       if [[ "$hostname" == "$allowed_hostname" ]]; then
         return 0
