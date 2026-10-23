@@ -37,6 +37,8 @@ cask "intellij-idea"
 cask "microsoft-onenote"
 # Android file transfer
 cask "openmtp"
+# Replacement for Docker Desktop
+cask "orbstack"
 # Instant messaging application focusing on security
 cask "signal"
 # Music streaming service

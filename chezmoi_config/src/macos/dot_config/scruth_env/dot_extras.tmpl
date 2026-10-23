@@ -14,3 +14,8 @@ export NVM_HOMEBREW="$HOMEBREW_PREFIX/opt/nvm"
 
 # uv
 . "{{ .chezmoi.homeDir }}/.local/bin/env"
+
+# Added by OrbStack: command-line tools and integration
+# This won't be added again if you remove it.
+# ^^ was added by OrbStack to ~/.zprofile but I moved that edit here after install
+source ~/.orbstack/shell/init.zsh 2>/dev/null || :
